@@ -55,33 +55,33 @@ app.post('/auth/register', registerValidation, handleValidationErrors, UserContr
 app.get('/auth/user', checkAuth, UserController.getMe)
 
 // Personal info
-app.post('/:lang/user/:user_id/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
-app.get('/:lang/personal_info/:id', checkAuth, PersonalInfoController.fetch)
-app.patch('/:lang/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update)
+app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
+app.get('/personal_info/:id', checkAuth, PersonalInfoController.fetch)
+app.patch('/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update)
 // Personal hobbies
-app.post('/:lang/user/:user_id/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create)
-app.get('/:lang/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch)
-app.patch('/:lang/personal_hobbies/:id', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.update)
+app.post('/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create)
+app.get('/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch)
+app.patch('/personal_hobbies/:id', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.update)
 // Personal languages
-app.post('/:lang/user/:user_id/personal_languages', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.create)
-app.get('/:lang/personal_languages/:id', checkAuth, PersonalLanguagesController.fetch)
-app.patch('/:lang/personal_languages/:id', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.update)
+app.post('/personal_languages', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.create)
+app.get('/personal_languages/:id', checkAuth, PersonalLanguagesController.fetch)
+app.patch('/personal_languages/:id', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.update)
 // Personal experience
-app.post('/:lang/user/:user_id/personal_experience', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.create)
-app.get('/:lang/personal_experience/:id', checkAuth, PersonalExperienceController.fetch)
-app.patch('/:lang/personal_experience/:id', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.update)
+app.post('/personal_experience', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.create)
+app.get('/personal_experience/:id', checkAuth, PersonalExperienceController.fetch)
+app.patch('/personal_experience/:id', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.update)
 // Personal education
-app.post('/:lang/user/:user_id/personal_education', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.create)
-app.get('/:lang/personal_education/:id', checkAuth, PersonalEducationController.fetch)
-app.patch('/:lang/personal_education/:id', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.update)
+app.post('/personal_education', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.create)
+app.get('/personal_education/:id', checkAuth, PersonalEducationController.fetch)
+app.patch('/personal_education/:id', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.update)
 // Personal courses
-app.post('/:lang/user/:user_id/personal_courses', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.create)
-app.get('/:lang/personal_courses/:id', checkAuth, PersonalCoursesController.fetch)
-app.patch('/:lang/personal_courses/:id', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.update)
+app.post('/personal_courses', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.create)
+app.get('/personal_courses/:id', checkAuth, PersonalCoursesController.fetch)
+app.patch('/personal_courses/:id', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.update)
 // Personal skills
-app.post('/:lang/user/:user_id/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create)
-app.get('/:lang/personal_skills/:id', checkAuth, PersonalSkillsController.fetch)
-app.patch('/:lang/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update)
+app.post('/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create)
+app.get('/personal_skills/:id', checkAuth, PersonalSkillsController.fetch)
+app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update)
 
 // POST загрузка изображения
 // app.post('/upload', checkAuth, upload.single('image'), (req, res) => {

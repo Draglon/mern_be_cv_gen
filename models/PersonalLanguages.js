@@ -1,24 +1,13 @@
 import mongoose from "mongoose";
-
-const PersonalLanguageSchema = new mongoose.Schema({
-  language: String,
-  level: String,
-},
-{
-  timestamps: true,
-});
+import mongooseIntl from 'mongoose-intl';
 
 const PersonalLanguagesSchema = new mongoose.Schema({
-  languages: [PersonalLanguageSchema],
+  languages: { type: String, intl: true },
 },
 {
   timestamps: true,
 });
 
-const PersonalLanguagesWithLocaleSchema = new mongoose.Schema({
-  en: [PersonalLanguagesSchema],
-  ru: [PersonalLanguagesSchema],
-  ua: [PersonalLanguagesSchema],
-});
+PersonalLanguagesSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
-export default mongoose.model('PersonalLanguages', PersonalLanguagesWithLocaleSchema);
+export const PersonalLanguagesModel = mongoose.model('PersonalLanguages', PersonalLanguagesSchema);

@@ -2,9 +2,8 @@ import PersonalHobbiesModel from '../models/PersonalHobbies.js'
 import UserModel from '../models/User.js'
 
 export const fetch = async (req, res) => {
-      const personalHobbiesId = req.params.id;
-
   try {
+    const personalHobbiesId = req.params.id;
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId)
 
     if (!personalHobbies) {
@@ -15,7 +14,7 @@ export const fetch = async (req, res) => {
 
     const personalHobbiesData = personalHobbies._doc;
 
-    res.json({ ...personalHobbiesData })
+    res.json(personalHobbiesData)
   } catch (error) {
     console.log(error)
 
@@ -26,20 +25,18 @@ export const fetch = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-  const lang = req.params.lang;
-  const userId = req.params.user_id;
-
   try {
-    const doc = new PersonalHobbiesModel({
-      [lang]: {
-        hobbies: req.body.hobbies,
-      }
-    });
+    const personalHobbies = new PersonalHobbiesModel();
 
-    const personalHobbiesData = await doc.save();
+    console.log(req.body);
+
+    personalHobbies.setLanguage(req.body.locale);
+    personalHobbies.set('hobbies', req.body.hobbies.join(', '));
+
+    const personalHobbiesData = await personalHobbies.save();
 
     await UserModel.updateOne({
-      _id: userId,
+      _id: req.body.userId,
     }, {
       $set: {
         personalHobbiesId: personalHobbiesData._id,
@@ -58,20 +55,15 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const lang = req.params.lang;
     const personalHobbiesId = req.params.id;
+    const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
 
-    await PersonalHobbiesModel.updateOne({
-      _id: personalHobbiesId,
-    }, {
-      [lang]: {
-        hobbies: req.body.hobbies,
-      }
-    });
+    personalHobbies.setLanguage(req.body.locale);
+    personalHobbies.set('hobbies', req.body.hobbies.join(', '));
 
-    res.json({
-      success: true,
-    });
+    const personalHobbiesData = await personalHobbies.save();
+
+    res.json(personalHobbiesData);
   } catch (error) {
     console.log(error);
 

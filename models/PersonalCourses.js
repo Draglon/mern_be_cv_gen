@@ -1,14 +1,17 @@
 import mongoose from "mongoose";
+import mongooseIntl from 'mongoose-intl';
 
 const PersonalCourseSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  startDate: String,
-  endDate: String,
+  name: { type: String, intl: true },
+  description: { type: String, intl: true },
+  startDate: { type: String, intl: true },
+  endDate: { type: String, intl: true },
 },
 {
   timestamps: true,
 });
+
+PersonalCourseSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
 const PersonalCoursesSchema = new mongoose.Schema({
   courses: [PersonalCourseSchema],
@@ -17,10 +20,5 @@ const PersonalCoursesSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const PersonalCoursesWithLocaleSchema = new mongoose.Schema({
-  en: [PersonalCoursesSchema],
-  ru: [PersonalCoursesSchema],
-  ua: [PersonalCoursesSchema],
-});
 
-export default mongoose.model('PersonalCourses', PersonalCoursesWithLocaleSchema);
+export default mongoose.model('PersonalCourses', PersonalCoursesSchema);

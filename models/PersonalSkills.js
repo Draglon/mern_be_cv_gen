@@ -1,9 +1,17 @@
 import mongoose from "mongoose";
+import mongooseIntl from 'mongoose-intl';
 
 const PersonalSkillSchema = new mongoose.Schema({
-  name: String,
-  level: Number,
-  visible: Boolean,
+  name: {
+    type: String,
+    intl: true,
+  },
+  level: {
+    type: Number,
+  },
+  visible: {
+    type: Boolean,
+  },
 },
 {
   timestamps: true,
@@ -16,10 +24,6 @@ const PersonalSkillsSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const PersonalSkillsWithLocaleSchema = new mongoose.Schema({
-  en: [PersonalSkillsSchema],
-  ru: [PersonalSkillsSchema],
-  ua: [PersonalSkillsSchema],
-});
+PersonalSkillsSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
-export default mongoose.model('PersonalSkills', PersonalSkillsWithLocaleSchema);
+export default mongoose.model('PersonalSkills', PersonalSkillsSchema);

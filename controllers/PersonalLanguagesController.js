@@ -1,4 +1,4 @@
-import PersonalLanguagesModel from '../models/PersonalLanguages.js'
+import { PersonalLanguagesModel } from '../models/PersonalLanguages.js'
 
 export const fetch = async (req, res) => {
       const personalLanguagesId = req.params.id;
@@ -25,19 +25,16 @@ export const fetch = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-  const lang = req.params.lang;
-
   try {
-    const doc = new PersonalLanguagesModel({
-      [lang]: {
-        languages: req.body.languages,
-      }
-    });
+    const personalLanguages = new PersonalLanguagesModel();
 
-    const post = await doc.save();
+    personalLanguages.setLanguage(req.body.locale);
+    personalLanguages.set('languages', JSON.stringify(req.body.languages));
 
-    res.json(post);
-  } catch (error) {
+    const personalLanguagesData = await personalLanguages.save();
+
+    res.json(personalLanguagesData);
+ } catch (error) {
     console.log(error);
 
     res.status(500).json({
@@ -48,20 +45,15 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const lang = req.params.lang;
     const personalLanguagesId = req.params.id;
+    const personalLanguages = await PersonalLanguagesModel.findById(personalLanguagesId);
 
-    await PersonalLanguagesModel.updateOne({
-      _id: personalLanguagesId,
-    }, {
-      [lang]: {
-        languages: req.body.languages,
-      }
-    });
+    personalLanguages.setLanguage(req.body.locale);
+    personalLanguages.set('languages', JSON.stringify(req.body.languages));
 
-    res.json({
-      success: true,
-    });
+    const personalLanguagesData = await personalLanguages.save();
+
+    res.json(personalLanguagesData);
   } catch (error) {
     console.log(error);
 

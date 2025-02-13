@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
+import mongooseIntl from 'mongoose-intl';
 
 const PersonalEducationSchema = new mongoose.Schema({
-  institute: String,
-  degree: String,
-  specialization: String,
-  startDate: String,
-  endDate: String,
+  institute: { type: String, intl: true },
+  degree: { type: String, intl: true },
+  specialization: { type: String, intl: true },
+  startDate: { type: String, intl: true },
+  endDate: { type: String, intl: true },
 },
 {
   timestamps: true,
 });
+
+PersonalEducationSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
 const PersonalEducationsSchema = new mongoose.Schema({
   education: [PersonalEducationSchema],
@@ -18,10 +21,4 @@ const PersonalEducationsSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const PersonalEducationWithLocaleSchema = new mongoose.Schema({
-  en: [PersonalEducationsSchema],
-  ru: [PersonalEducationsSchema],
-  ua: [PersonalEducationsSchema],
-});
-
-export default mongoose.model('PersonalEducation', PersonalEducationWithLocaleSchema);
+export default mongoose.model('PersonalEducation', PersonalEducationsSchema);

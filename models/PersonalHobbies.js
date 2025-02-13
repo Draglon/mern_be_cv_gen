@@ -1,16 +1,13 @@
 import mongoose from "mongoose";
+import mongooseIntl from 'mongoose-intl';
 
 const PersonalHobbiesSchema = new mongoose.Schema({
-  hobbies: [String],
+  hobbies: { type: String, intl: true },
 },
 {
   timestamps: true,
 });
 
-const PersonalHobbiesWithLocaleSchema = new mongoose.Schema({
-  en: [PersonalHobbiesSchema],
-  ru: [PersonalHobbiesSchema],
-  ua: [PersonalHobbiesSchema],
-});
+PersonalHobbiesSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
-export default mongoose.model('PersonalHobbies', PersonalHobbiesWithLocaleSchema);
+export default mongoose.model('PersonalHobbies', PersonalHobbiesSchema);
