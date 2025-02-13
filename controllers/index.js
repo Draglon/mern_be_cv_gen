@@ -1,0 +1,8 @@
+export * as UserController from "./UserController.js";
+export * as PersonalInfoController from "./PersonalInfoController.js";
+export * as PersonalHobbiesController from "./PersonalHobbiesController.js";
+export * as PersonalLanguagesController from "./PersonalLanguagesController.js";
+export * as PersonalExperienceController from "./PersonalExperienceController.js";
+export * as PersonalEducationController from "./PersonalEducationController.js";
+export * as PersonalCoursesController from "./PersonalCoursesController.js";
+export * as PersonalSkillsController from "./PersonalSkillsController.js";
