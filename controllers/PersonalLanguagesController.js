@@ -1,4 +1,4 @@
-import { PersonalLanguagesModel } from '../models/PersonalLanguages.js'
+import PersonalLanguagesModel from '../models/PersonalLanguages.js'
 
 export const fetch = async (req, res) => {
       const personalLanguagesId = req.params.id;

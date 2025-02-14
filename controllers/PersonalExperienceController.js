@@ -1,7 +1,7 @@
 import PersonalExperienceModel from '../models/PersonalExperience.js'
 
 export const fetch = async (req, res) => {
-      const personalExperienceId = req.params.id;
+  const personalExperienceId = req.params.id;
 
   try {
     const personalExperience = await PersonalExperienceModel.findById(personalExperienceId)
@@ -25,18 +25,15 @@ export const fetch = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-  const lang = req.params.lang;
-
   try {
-    const doc = new PersonalExperienceModel({
-      [lang]: {
-        experience: req.body.experience
-      }
-    });
+    const personalExperience = new PersonalExperienceModel();
 
-    const post = await doc.save();
+    personalExperience.setLanguage(req.body.locale);
+    personalExperience.set('experience', JSON.stringify(req.body.experience));
 
-    res.json(post);
+    const personalExperienceData = await personalExperience.save();
+
+    res.json(personalExperienceData);
   } catch (error) {
     console.log(error);
 
@@ -48,20 +45,15 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const lang = req.params.lang;
     const personalExperienceId = req.params.id;
+    const personalExperience = await PersonalExperienceModel.findById(personalExperienceId);
 
-    await PersonalExperienceModel.updateOne({
-      _id: personalExperienceId,
-    }, {
-      [lang]: {
-        experience: req.body.experience
-      }
-    });
+    personalExperience.setLanguage(req.body.locale);
+    personalExperience.set('experience', JSON.stringify(req.body.experience));
 
-    res.json({
-      success: true,
-    });
+    const personalExperienceData = await personalExperience.save();
+
+    res.json(personalExperienceData);
   } catch (error) {
     console.log(error);
 

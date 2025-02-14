@@ -10,4 +10,4 @@ const PersonalLanguagesSchema = new mongoose.Schema({
 
 PersonalLanguagesSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
-export const PersonalLanguagesModel = mongoose.model('PersonalLanguages', PersonalLanguagesSchema);
+export default mongoose.model('PersonalLanguages', PersonalLanguagesSchema);

@@ -1,24 +1,8 @@
 import mongoose from "mongoose";
 import mongooseIntl from 'mongoose-intl';
 
-const PersonalSkillSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    intl: true,
-  },
-  level: {
-    type: Number,
-  },
-  visible: {
-    type: Boolean,
-  },
-},
-{
-  timestamps: true,
-});
-
 const PersonalSkillsSchema = new mongoose.Schema({
-  skills: [PersonalSkillSchema],
+  skills: { type: String, intl: true },
 },
 {
   timestamps: true,

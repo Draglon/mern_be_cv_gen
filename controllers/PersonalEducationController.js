@@ -1,7 +1,7 @@
 import PersonalEducationModel from '../models/PersonalEducation.js'
 
 export const fetch = async (req, res) => {
-      const personalEducationId = req.params.id;
+  const personalEducationId = req.params.id;
 
   try {
     const personalEducation = await PersonalEducationModel.findById(personalEducationId)
@@ -25,18 +25,15 @@ export const fetch = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-  const lang = req.params.lang;
-
   try {
-    const doc = new PersonalEducationModel({
-      [lang]: {
-        education: req.body.education
-      }
-    });
+    const personalEducation = new PersonalEducationModel();
 
-    const post = await doc.save();
+    personalEducation.setLanguage(req.body.locale);
+    personalEducation.set('education', JSON.stringify(req.body.education));
 
-    res.json(post);
+    const personalEducationData = await personalEducation.save();
+
+    res.json(personalEducationData);
   } catch (error) {
     console.log(error);
 
@@ -48,20 +45,15 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const lang = req.params.lang;
     const personalEducationId = req.params.id;
+    const personalEducation = await PersonalEducationModel.findById(personalEducationId);
 
-    await PersonalEducationModel.updateOne({
-      _id: personalEducationId,
-    }, {
-      [lang]: {
-        education: req.body.education
-      }
-    });
+    personalEducation.setLanguage(req.body.locale);
+    personalEducation.set('education', JSON.stringify(req.body.education));
 
-    res.json({
-      success: true,
-    });
+    const personalEducationData = await personalEducation.save();
+
+    res.json(personalEducationData);
   } catch (error) {
     console.log(error);
 
