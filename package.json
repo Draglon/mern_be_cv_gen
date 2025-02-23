@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start:dev": "nodemon index.js",
+    "test": "mocha *.test.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,8 @@
     "nodemon": "^3.1.7"
   },
   "devDependencies": {
-    "mongoose-intl": "^3.3.0"
+    "mocha": "^11.1.0",
+    "mongoose-intl": "^3.3.0",
+    "supertest": "^7.0.0"
   }
 }

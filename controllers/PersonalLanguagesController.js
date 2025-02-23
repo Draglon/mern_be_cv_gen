@@ -1,4 +1,5 @@
 import PersonalLanguagesModel from '../models/PersonalLanguages.js'
+import UserModel from '../models/User.js'
 
 export const fetch = async (req, res) => {
       const personalLanguagesId = req.params.id;
@@ -32,6 +33,14 @@ export const create = async (req, res) => {
     personalLanguages.set('languages', JSON.stringify(req.body.languages));
 
     const personalLanguagesData = await personalLanguages.save();
+
+    await UserModel.updateOne({
+      _id: req.body.userId,
+    }, {
+      $set: {
+        personalLanguagesId: personalLanguagesData._id,
+      }
+    });
 
     res.json(personalLanguagesData);
  } catch (error) {

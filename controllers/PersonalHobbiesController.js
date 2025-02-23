@@ -31,7 +31,7 @@ export const create = async (req, res) => {
     console.log(req.body);
 
     personalHobbies.setLanguage(req.body.locale);
-    personalHobbies.set('hobbies', req.body.hobbies.join(', '));
+    personalHobbies.set('hobbies', JSON.stringify(req.body.hobbies));
 
     const personalHobbiesData = await personalHobbies.save();
 
