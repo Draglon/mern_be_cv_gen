@@ -42,14 +42,20 @@ export const personalEducationValidation = [
 ]
 
 export const personalCoursesValidation = [
-  body('name', 'Укажите название курса.').optional(),
+  body('course', 'Укажите название курса.').optional(),
   body('description', 'Укажите описание курса.').optional(),
   body('startDate', 'Укажите дату начала обучения.').optional(),
   body('endDate', 'Укажите дату конеца обучения.').optional(),
 ]
 
 export const personalSkillsValidation = [
-  body('name', 'Укажите название навыка.').optional(),
+  body('skill', 'Укажите название навыка.').optional(),
   body('level', 'Укажите уровень владения навыком.').optional(),
+  body('visible').optional(),
+]
+
+export const personalToolsValidation = [
+  body('tool', 'Укажите название инструмента.').optional(),
+  body('level', 'Укажите уровень владения инструментом.').optional(),
   body('visible').optional(),
 ]

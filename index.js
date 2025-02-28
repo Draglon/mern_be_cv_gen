@@ -13,6 +13,7 @@ import {
   personalEducationValidation,
   personalCoursesValidation,
   personalSkillsValidation,
+  personalToolsValidation,
 } from "./validations/personalValidations.js";
 import {
   UserController,
@@ -23,6 +24,7 @@ import {
   PersonalEducationController,
   PersonalCoursesController,
   PersonalSkillsController,
+  PersonalToolsController,
 } from "./controllers/index.js";
 
 // Подключение к базе данных
@@ -82,6 +84,11 @@ app.patch('/personal_courses/:id', checkAuth, personalCoursesValidation, handleV
 app.post('/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create)
 app.get('/personal_skills/:id', checkAuth, PersonalSkillsController.fetch)
 app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update)
+// Personal tools
+app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create)
+app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
+app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
+
 
 // POST загрузка изображения
 // app.post('/upload', checkAuth, upload.single('image'), (req, res) => {

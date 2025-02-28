@@ -1,4 +1,5 @@
 import PersonalCoursesModel from '../models/PersonalCourses.js'
+import UserModel from '../models/User.js'
 
 export const fetch = async (req, res) => {
   const personalCoursesId = req.params.id;
@@ -32,6 +33,14 @@ export const create = async (req, res) => {
     personalCourses.set('courses', JSON.stringify(req.body.courses));
 
     const personalCoursesData = await personalCourses.save();
+
+    await UserModel.updateOne({
+      _id: req.body.userId,
+    }, {
+      $set: {
+        personalCoursesId: personalCoursesData._id,
+      }
+    });
 
     res.json(personalCoursesData);
   } catch (error) {

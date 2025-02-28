@@ -18,6 +18,11 @@ const UserSchema = new mongoose.Schema({
   personalInfoId: String,
   personalHobbiesId: String,
   personalLanguagesId: String,
+  personalExperienceId: String,
+  personalEducationId: String,
+  personalCoursesId: String,
+  personalSkillsId: String,
+  personalToolsId: String,
 },
 {
   timestamps: true,

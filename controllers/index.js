@@ -6,3 +6,4 @@ export * as PersonalExperienceController from "./PersonalExperienceController.js
 export * as PersonalEducationController from "./PersonalEducationController.js";
 export * as PersonalCoursesController from "./PersonalCoursesController.js";
 export * as PersonalSkillsController from "./PersonalSkillsController.js";
+export * as PersonalToolsController from "./PersonalToolsController.js";
