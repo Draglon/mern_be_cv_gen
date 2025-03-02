@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 import mongooseIntl from 'mongoose-intl';
 
 const PersonalToolsSchema = new mongoose.Schema({
-  tools: { type: String, intl: true },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
+  tools: { type: String, intl: true, default: "" },
 },
 {
   timestamps: true,

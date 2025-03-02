@@ -31,6 +31,7 @@ export const create = async (req, res) => {
 
     personalTools.setLanguage(req.body.locale);
     personalTools.set('skills', JSON.stringify(req.body.skills));
+    personalTools.set('userId', req.body.userId);
 
     const personalToolsData = await personalTools.save();
 

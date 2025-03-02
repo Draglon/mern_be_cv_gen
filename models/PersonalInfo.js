@@ -2,6 +2,16 @@ import mongoose from "mongoose";
 import mongooseIntl from 'mongoose-intl';
 
 const PersonalInfoSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
+  userUrl: {
+    type: String,
+    intl: true,
+    default: "",
+  },
   firstName: {
     type: String,
     intl: true,
@@ -15,36 +25,37 @@ const PersonalInfoSchema = new mongoose.Schema({
   about: {
     type: String,
     intl: true,
-    required: true,
+    default: "",
   },
   email: {
     type: String,
     intl: true,
-    required: true,
+    required: "",
   },
   address: {
     type: String,
     intl: true,
+    default: "",
   },
   phoneNumber: {
     type: String,
     intl: true,
+    default: "",
   },
   birthday: {
     type: String,
     intl: true,
+    default: "",
   },
   skype: {
     type: String,
     intl: true,
+    default: "",
   },
   linkedIn: {
     type: String,
     intl: true,
-  },
-  userUrl: {
-    type: String,
-    intl: true,
+    default: "",
   },
 },
 {

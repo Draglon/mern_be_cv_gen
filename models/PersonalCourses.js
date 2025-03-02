@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 import mongooseIntl from 'mongoose-intl';
 
 const PersonalCoursesSchema = new mongoose.Schema({
-  courses: { type: String, intl: true },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
+  courses: { type: String, intl: true, default: "" },
 },
 {
   timestamps: true,

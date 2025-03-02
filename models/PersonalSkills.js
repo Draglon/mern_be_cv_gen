@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 import mongooseIntl from 'mongoose-intl';
 
 const PersonalSkillsSchema = new mongoose.Schema({
-  skills: { type: String, intl: true },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
+  skills: { type: String, intl: true, default: "" },
 },
 {
   timestamps: true,

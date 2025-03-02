@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-// import multer from "multer";
+import multer from "multer";
 import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
@@ -27,34 +27,40 @@ import {
   PersonalToolsController,
 } from "./controllers/index.js";
 
-// Подключение к базе данных
+// Connecting to a database
 mongoose
   .connect('mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => { console.log('DB ok') })
   .catch((err) => { console.log('DB error', err) });
 
-const app = express(); // запуск Express
-// const storage = multer.diskStorage({
-//   destination: (_, __, cb) => {
-//     cb(null, 'uploads');
-//   },
-//   filename: (_, file, cb) => {
-//     cb(null, file.originalname); 
-//   }
-// })
+const app = express();
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, 'uploads/avatars');
+  },
+  filename: (_, file, cb) => {
+    cb(null, file.originalname); 
+  }
+})
 
-// const upload = multer({ storage });
+const upload = multer({ storage });
 
-app.use(express.json()); // читать JSON в запросах
+app.use(express.json()); // reads JSON requests
 app.use(cors());
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads/avatars', express.static('uploads/avatars'));
 
-// POST запрос login
+// login
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
-// POST запрос registration
+// registration
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register)
-// GET запрос на получение информации о пользователе
+// general information by user
 app.get('/auth/user', checkAuth, UserController.getMe)
+// upload avatar
+app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
+  res.json({
+    url: `/uploads/avatars/${req.file.originalname}`
+  })
+});
 
 // Personal info
 app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
@@ -88,16 +94,14 @@ app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleVal
 app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create)
 app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
 app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
+// Personal upload photo
+app.post('/upload_personal_photo', checkAuth, upload.single('image'), (req, res) => {
+  res.json({
+    url: `/uploads/personal_photos/${req.file.originalname}`
+  })
+});
 
-
-// POST загрузка изображения
-// app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
-//   res.json({
-//     url: `/uploads/${req.file.originalname}`
-//   })
-// });
-
-// Запуск сервера
+// Start server
 app.listen(4000, (error) => {
   if (error) {
     return console.log(error);

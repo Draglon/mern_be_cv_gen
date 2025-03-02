@@ -31,6 +31,7 @@ export const create = async (req, res) => {
 
     personalExperience.setLanguage(req.body.locale);
     personalExperience.set('experience', JSON.stringify(req.body.experience));
+    personalExperience.set('userId', req.body.userId);
 
     const personalExperienceData = await personalExperience.save();
 

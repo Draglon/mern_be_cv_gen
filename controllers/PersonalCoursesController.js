@@ -31,6 +31,7 @@ export const create = async (req, res) => {
 
     personalCourses.setLanguage(req.body.locale);
     personalCourses.set('courses', JSON.stringify(req.body.courses));
+    personalCourses.set('userId', req.body.userId);
 
     const personalCoursesData = await personalCourses.save();
 

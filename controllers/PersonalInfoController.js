@@ -39,6 +39,7 @@ export const create = async (req, res) => {
     personalInfo.set('skype', req.body.skype);
     personalInfo.set('linkedIn', req.body.linkedIn);
     personalInfo.set('userUrl', req.body.userUrl);
+    personalInfo.set('userId', req.body.userId);
 
     const personalInfoData = await personalInfo.save();
 
