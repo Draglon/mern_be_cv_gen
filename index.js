@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+import bodyParser from "body-parser";
 import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
@@ -43,7 +44,10 @@ const storage = multer.diskStorage({
   }
 })
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage, limits: { fileSize: 100000000 }});
+
+app.use(bodyParser.json({limit: "100mb", parameterLimit: 100000000}));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit: 100000000}));
 
 app.use(express.json()); // reads JSON requests
 app.use(cors());
@@ -94,12 +98,6 @@ app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleVal
 app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create)
 app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
 app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
-// Personal upload photo
-app.post('/upload_personal_photo', checkAuth, upload.single('image'), (req, res) => {
-  res.json({
-    url: `/uploads/personal_photos/${req.file.originalname}`
-  })
-});
 
 // Start server
 app.listen(4000, (error) => {

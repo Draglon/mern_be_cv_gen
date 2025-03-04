@@ -9,7 +9,6 @@ const PersonalInfoSchema = new mongoose.Schema({
   },
   userUrl: {
     type: String,
-    intl: true,
     default: "",
   },
   firstName: {
