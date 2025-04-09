@@ -30,7 +30,7 @@ export const create = async (req, res) => {
     const personalTools = new PersonalToolsModel();
 
     personalTools.setLanguage(req.body.locale);
-    personalTools.set('skills', JSON.stringify(req.body.skills));
+    personalTools.set('tools', JSON.stringify(req.body.tools));
     personalTools.set('userId', req.body.userId);
 
     const personalToolsData = await personalTools.save();
@@ -59,7 +59,7 @@ export const update = async (req, res) => {
     const personalTools = await PersonalToolsModel.findById(personalToolsId);
 
     personalTools.setLanguage(req.body.locale);
-    personalTools.set('skills', JSON.stringify(req.body.skills));
+    personalTools.set('tools', JSON.stringify(req.body.tools));
 
     const personalToolsData = await personalTools.save();
 
