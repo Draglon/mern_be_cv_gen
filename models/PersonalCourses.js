@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import mongooseIntl from 'mongoose-intl';
+// import mongooseIntl from 'mongoose-intl';
 
 const PersonalCoursesSchema = new mongoose.Schema({
   userId: {
@@ -13,6 +13,6 @@ const PersonalCoursesSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-PersonalCoursesSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
+// PersonalCoursesSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
 export default mongoose.model('PersonalCourses', PersonalCoursesSchema);
