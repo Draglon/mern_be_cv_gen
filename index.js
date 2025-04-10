@@ -29,8 +29,9 @@ import {
 } from "./controllers/index.js";
 
 // Connecting to a database
+// mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0
 mongoose
-  .connect('mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0')
+  .connect(process.env.MONGODB_URL)
   .then(() => { console.log('DB ok') })
   .catch((err) => { console.log('DB error', err) });
 
@@ -100,7 +101,7 @@ app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
 app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
 
 // Start server
-app.listen(4000, (error) => {
+app.listen(process.env.PORT || 4000, (error) => {
   if (error) {
     return console.log(error);
   }
