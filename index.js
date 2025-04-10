@@ -29,8 +29,9 @@ import {
 } from "./controllers/index.js";
 
 // Connecting to a database
+// 'mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0'
 mongoose
-  .connect(process.env.MONGODB_URL || 'mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0')
+  .connect(process.env.MONGODB_URI)
   .then(() => { console.log('DB ok') })
   .catch((err) => { console.log('DB error', err) });
 
