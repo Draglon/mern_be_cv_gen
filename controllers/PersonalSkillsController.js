@@ -29,8 +29,7 @@ export const create = async (req, res) => {
   try {
     const personalSkills = new PersonalSkillsModel();
 
-    personalSkills.setLanguage(req.body.locale);
-    personalSkills.set('skills', JSON.stringify(req.body.skills));
+    personalHobbies.skills[req.body.locale] = JSON.stringify(req.body.skills);
     personalSkills.set('userId', req.body.userId);
 
     const personalSkillsData = await personalSkills.save();

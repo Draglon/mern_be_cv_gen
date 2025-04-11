@@ -8,24 +8,24 @@ import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation } from "./validations/userValidations.js";
 import {
   personalInfoValidation,
-  // personalHobbiesValidation,
-  // personalLanguagesValidation,
-  // personalExperienceValidation,
-  // personalEducationValidation,
-  // personalCoursesValidation,
-  // personalSkillsValidation,
-  // personalToolsValidation,
+  personalHobbiesValidation,
+  personalLanguagesValidation,
+  personalExperienceValidation,
+  personalEducationValidation,
+  personalCoursesValidation,
+  personalSkillsValidation,
+  personalToolsValidation,
 } from "./validations/personalValidations.js";
 import {
   UserController,
   PersonalInfoController,
-  // PersonalHobbiesController,
-  // PersonalLanguagesController,
-  // PersonalExperienceController,
-  // PersonalEducationController,
-  // PersonalCoursesController,
-  // PersonalSkillsController,
-  // PersonalToolsController,
+  PersonalHobbiesController,
+  PersonalLanguagesController,
+  PersonalExperienceController,
+  PersonalEducationController,
+  PersonalCoursesController,
+  PersonalSkillsController,
+  PersonalToolsController,
 } from "./controllers/index.js";
 
 // Connecting to a database
@@ -75,34 +75,34 @@ app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
 app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
 app.get('/personal_info/:id', checkAuth, PersonalInfoController.fetch)
 app.patch('/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update)
-// // Personal hobbies
-// app.post('/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create)
-// app.get('/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch)
-// app.patch('/personal_hobbies/:id', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.update)
-// // Personal languages
-// app.post('/personal_languages', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.create)
-// app.get('/personal_languages/:id', checkAuth, PersonalLanguagesController.fetch)
-// app.patch('/personal_languages/:id', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.update)
-// // Personal experience
-// app.post('/personal_experience', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.create)
-// app.get('/personal_experience/:id', checkAuth, PersonalExperienceController.fetch)
-// app.patch('/personal_experience/:id', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.update)
-// // Personal education
-// app.post('/personal_education', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.create)
-// app.get('/personal_education/:id', checkAuth, PersonalEducationController.fetch)
-// app.patch('/personal_education/:id', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.update)
-// // Personal courses
-// app.post('/personal_courses', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.create)
-// app.get('/personal_courses/:id', checkAuth, PersonalCoursesController.fetch)
-// app.patch('/personal_courses/:id', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.update)
-// // Personal skills
-// app.post('/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create)
-// app.get('/personal_skills/:id', checkAuth, PersonalSkillsController.fetch)
-// app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update)
-// // Personal tools
-// app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create)
-// app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
-// app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
+// Personal hobbies
+app.post('/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create)
+app.get('/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch)
+app.patch('/personal_hobbies/:id', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.update)
+// Personal languages
+app.post('/personal_languages', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.create)
+app.get('/personal_languages/:id', checkAuth, PersonalLanguagesController.fetch)
+app.patch('/personal_languages/:id', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.update)
+// Personal experience
+app.post('/personal_experience', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.create)
+app.get('/personal_experience/:id', checkAuth, PersonalExperienceController.fetch)
+app.patch('/personal_experience/:id', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.update)
+// Personal education
+app.post('/personal_education', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.create)
+app.get('/personal_education/:id', checkAuth, PersonalEducationController.fetch)
+app.patch('/personal_education/:id', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.update)
+// Personal courses
+app.post('/personal_courses', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.create)
+app.get('/personal_courses/:id', checkAuth, PersonalCoursesController.fetch)
+app.patch('/personal_courses/:id', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.update)
+// Personal skills
+app.post('/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create)
+app.get('/personal_skills/:id', checkAuth, PersonalSkillsController.fetch)
+app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update)
+// Personal tools
+app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create)
+app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
+app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
 
 // Start server
 app.listen(process.env.PORT || 4000, (error) => {

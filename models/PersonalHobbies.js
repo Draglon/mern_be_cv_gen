@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-// import mongooseIntl from 'mongoose-intl';
+
+import localesSchema from "../lib/constants/locales.js";
 
 const PersonalHobbiesSchema = new mongoose.Schema({
   userId: {
@@ -7,12 +8,10 @@ const PersonalHobbiesSchema = new mongoose.Schema({
     ref: "User",
     default: null,
   },
-  hobbies: { type: String, intl: true, default: "" },
+  hobbies: localesSchema,
 },
 {
   timestamps: true,
 });
-
-// PersonalHobbiesSchema.plugin(mongooseIntl, { languages: ['en', 'ru', 'ua'] });
 
 export default mongoose.model('PersonalHobbies', PersonalHobbiesSchema);

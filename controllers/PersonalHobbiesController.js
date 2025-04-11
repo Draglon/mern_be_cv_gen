@@ -28,10 +28,7 @@ export const create = async (req, res) => {
   try {
     const personalHobbies = new PersonalHobbiesModel();
 
-    console.log(req.body);
-
-    personalHobbies.setLanguage(req.body.locale);
-    personalHobbies.set('hobbies', JSON.stringify(req.body.hobbies));
+    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
     personalHobbies.set('userId', req.body.userId);
 
     const personalHobbiesData = await personalHobbies.save();
