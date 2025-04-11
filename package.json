@@ -4,6 +4,9 @@
   "description": "mern",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "start": "node index.js",
     "start:dev": "nodemon index.js",
