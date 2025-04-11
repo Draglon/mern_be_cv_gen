@@ -28,6 +28,8 @@ export const create = async (req, res) => {
   try {
     const personalInfo = new PersonalInfoModel();
 
+    console.log("personalInfo: ", personalInfo);
+
     personalInfo.setLanguage(req.body.locale);
     personalInfo.set('firstName', req.body.firstName);
     personalInfo.set('lastName', req.body.lastName);

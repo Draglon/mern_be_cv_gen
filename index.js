@@ -6,19 +6,19 @@ import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation } from "./validations/userValidations.js";
-// import {
-//   personalInfoValidation,
-//   personalHobbiesValidation,
-//   personalLanguagesValidation,
-//   personalExperienceValidation,
-//   personalEducationValidation,
-//   personalCoursesValidation,
-//   personalSkillsValidation,
-//   personalToolsValidation,
-// } from "./validations/personalValidations.js";
+import {
+  personalInfoValidation,
+  // personalHobbiesValidation,
+  // personalLanguagesValidation,
+  // personalExperienceValidation,
+  // personalEducationValidation,
+  // personalCoursesValidation,
+  // personalSkillsValidation,
+  // personalToolsValidation,
+} from "./validations/personalValidations.js";
 import {
   UserController,
-  // PersonalInfoController,
+  PersonalInfoController,
   // PersonalHobbiesController,
   // PersonalLanguagesController,
   // PersonalExperienceController,
@@ -72,9 +72,9 @@ app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
 });
 
 // Personal info
-// app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
-// app.get('/personal_info/:id', checkAuth, PersonalInfoController.fetch)
-// app.patch('/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update)
+app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
+app.get('/personal_info/:id', checkAuth, PersonalInfoController.fetch)
+app.patch('/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update)
 // // Personal hobbies
 // app.post('/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create)
 // app.get('/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch)
