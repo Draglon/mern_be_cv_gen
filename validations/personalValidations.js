@@ -8,7 +8,6 @@ export const personalInfoValidation = [
   body('address', 'Укажите адрес.').optional(),
   body('phoneNumber', 'Укажите номер телефона.').optional(),
   body('birthday', 'Укажите дату рождения.').optional(),
-  body('skype', 'Укажите skype.').optional(),
   body('linkedIn', 'Укажите linkedIn.').optional(),
 ]
 
