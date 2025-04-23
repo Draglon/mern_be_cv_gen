@@ -64,17 +64,16 @@ export const update = async (req, res) => {
     const personalInfoId = req.params.id;
     const personalInfo = await PersonalInfoModel.findById(personalInfoId);
 
-    personalInfo.setLanguage(req.body.locale);
+    personalInfo.firstName[req.body.locale] = req.body.firstName;
+    personalInfo.lastName[req.body.locale] = req.body.lastName;
+    personalInfo.about[req.body.locale] = req.body.about;
+    personalInfo.email[req.body.locale] = req.body.email;
+    personalInfo.address[req.body.locale] = req.body.address;
+    personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;
+    personalInfo.birthday[req.body.locale] = req.body.birthday;
+    personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
     personalInfo.set('userUrl', req.body.userUrl);
-    personalInfo.set('firstName', req.body.firstName);
-    personalInfo.set('lastName', req.body.lastName);
-    personalInfo.set('about', req.body.about);
-    personalInfo.set('email', req.body.email);
-    personalInfo.set('address', req.body.address);
-    personalInfo.set('phoneNumber', req.body.phoneNumber);
-    personalInfo.set('birthday', req.body.birthday);
-    personalInfo.set('skype', req.body.skype);
-    personalInfo.set('linkedIn', req.body.linkedIn);
+    personalInfo.set('userId', req.body.userId);
 
     const personalInfoData = await personalInfo.save();
 

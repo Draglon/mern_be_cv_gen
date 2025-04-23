@@ -56,8 +56,8 @@ export const update = async (req, res) => {
     const personalHobbiesId = req.params.id;
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
 
-    personalHobbies.setLanguage(req.body.locale);
-    personalHobbies.set('hobbies', req.body.hobbies.join(', '));
+    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
+    personalHobbies.set('userId', req.body.userId);
 
     const personalHobbiesData = await personalHobbies.save();
 

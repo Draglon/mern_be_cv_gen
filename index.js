@@ -29,15 +29,15 @@ import {
 } from "./controllers/index.js";
 
 // Connecting to a database
-// mongoose
-//   .connect("mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0")
-//   .then(() => { console.log('DB ok') })
-//   .catch((err) => { console.log('DB error', err) });
-
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect("mongodb+srv://admin:draglon750@cluster0.znj5tnf.mongodb.net/FreeResume?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => { console.log('DB ok') })
   .catch((err) => { console.log('DB error', err) });
+
+// mongoose
+//   .connect(process.env.MONGODB_URI)
+//   .then(() => { console.log('DB ok') })
+//   .catch((err) => { console.log('DB error', err) });
 
 const app = express();
 const storage = multer.diskStorage({

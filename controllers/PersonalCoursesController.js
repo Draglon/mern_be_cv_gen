@@ -29,7 +29,7 @@ export const create = async (req, res) => {
   try {
     const personalCourses = new PersonalCoursesModel();
 
-    personalHobbies.courses[req.body.locale] = JSON.stringify(req.body.courses);
+    personalCourses.courses[req.body.locale] = JSON.stringify(req.body.courses);
     personalCourses.set('userId', req.body.userId);
 
     const personalCoursesData = await personalCourses.save();
@@ -57,8 +57,8 @@ export const update = async (req, res) => {
     const personalCoursesId = req.params.id;
     const personalCourses = await PersonalCoursesModel.findById(personalCoursesId);
 
-    personalCourses.setLanguage(req.body.locale);
-    personalCourses.set('courses', JSON.stringify(req.body.courses));
+    personalCourses.courses[req.body.locale] = JSON.stringify(req.body.courses);
+    personalCourses.set('userId', req.body.userId);
 
     const personalCoursesData = await personalCourses.save();
 
