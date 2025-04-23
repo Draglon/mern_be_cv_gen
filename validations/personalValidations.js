@@ -24,8 +24,8 @@ export const personalExperienceValidation = [
   body('position', 'Укажите должность.').optional(),
   body('companyName', 'Укажите название компании.').optional(),
   body('location', 'Укажите место работы.').optional(),
-  body('place', 'Укажите тип работы.').optional(),
-  body('time', 'Укажите рабочее время.').optional(),
+  body('placeOfWork', 'Укажите тип работы.').optional(),
+  body('workingTime', 'Укажите рабочее время.').optional(),
   body('startDate', 'Укажите время начала работы.').optional(),
   body('endDate', 'Укажите время окончания работы.').optional(),
   body('description', 'Укажите описание своей работы.').optional(),
@@ -35,6 +35,7 @@ export const personalExperienceValidation = [
 export const personalEducationValidation = [
   body('institute', 'Укажите институт.').optional(),
   body('degree', 'Укажите степень образования.').optional(),
+  body('faculty', 'Укажите факультет.').optional(),
   body('specialization', 'Укажите специализацию.').optional(),
   body('startDate', 'Укажите дату начала обучения.').optional(),
   body('endDate', 'Укажите дату конеца обучения.').optional(),
