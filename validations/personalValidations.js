@@ -1,9 +1,10 @@
 import { body } from 'express-validator'
 
 export const personalInfoValidation = [
-  body('userUrl', 'Неверная ссылка на фотографию').optional(),
-  body('firstName', 'Имя должно быть минимум 3 символа').isLength({ min: 3 }),
-  body('lastName', 'Фамилия должна быть минимум 3 символа').isLength({ min: 3 }),
+  body('sectionTitle', 'Укажите название раздела.').optional(),
+  body('userUrl', 'Неверная ссылка на фотографию.').optional(),
+  body('firstName', 'Имя должно быть минимум 3 символа.').isLength({ min: 3 }),
+  body('lastName', 'Фамилия должна быть минимум 3 символа.').isLength({ min: 3 }),
   body('email', 'Неверный формат почты.').trim().isEmail(),
   body('address', 'Укажите адрес.').optional(),
   body('phoneNumber', 'Укажите номер телефона.').optional(),
