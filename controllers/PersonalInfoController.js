@@ -37,6 +37,8 @@ export const create = async (req, res) => {
     personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;
     personalInfo.birthday[req.body.locale] = req.body.birthday;
     personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
+    personalInfo.telegram[req.body.locale] = req.body.telegram;
+    personalInfo.portfolio[req.body.locale] = req.body.portfolio;
     personalInfo.set('userUrl', req.body.userUrl);
     personalInfo.set('userId', req.body.userId);
 
@@ -74,6 +76,8 @@ export const update = async (req, res) => {
     personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;
     personalInfo.birthday[req.body.locale] = req.body.birthday;
     personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
+    personalInfo.telegram[req.body.locale] = req.body.telegram;
+    personalInfo.portfolio[req.body.locale] = req.body.portfolio;
     personalInfo.set('userUrl', req.body.userUrl);
     personalInfo.set('userId', req.body.userId);
 

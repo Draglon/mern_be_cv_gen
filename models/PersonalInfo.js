@@ -21,6 +21,8 @@ const PersonalInfoSchema = new mongoose.Schema({
   phoneNumber: localesSchema,
   birthday: localesSchema,
   linkedIn: localesSchema,
+  telegram: localesSchema,
+  portfolio: localesSchema,
 },
 {
   timestamps: true,
