@@ -22,6 +22,8 @@ export const personalLanguagesValidation = [
 ]
 
 export const personalExperienceValidation = [
+  body('sectionTitle', 'Укажите название раздела.').optional(),
+  body('lastPlacesOfWorks', 'Укажите число последних мест работ.').optional(),
   body('position', 'Укажите должность.').optional(),
   body('companyName', 'Укажите название компании.').optional(),
   body('location', 'Укажите место работы.').optional(),
