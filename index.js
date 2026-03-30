@@ -18,6 +18,7 @@ import {
 } from "./validations/personalValidations.js";
 import {
   UserController,
+  ResumeController,
   PersonalInfoController,
   PersonalHobbiesController,
   PersonalLanguagesController,
@@ -70,6 +71,9 @@ app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
     url: `/uploads/avatars/${req.file.originalname}`
   })
 });
+
+// Resume
+app.get('/resume/:userId', checkAuth, ResumeController.fetch)
 
 // Personal info
 app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
