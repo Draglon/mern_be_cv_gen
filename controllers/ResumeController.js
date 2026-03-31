@@ -91,7 +91,7 @@ export const fetch = async (req, res) => {
         sectionTitle: personalSkills?.sectionTitle,
         skills: personalSkills?.skills,
       },
-      tools: {
+      personalTools: {
         sectionTitle: personalTools?.sectionTitle,
         tools: personalTools?.tools,
       },
