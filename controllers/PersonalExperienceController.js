@@ -29,7 +29,7 @@ export const create = async (req, res) => {
   try {
     const personalExperience = new PersonalExperienceModel();
 
-    personalExperience.sectionTitle[req.body.locale] = req.body.sectionTitle;
+    personalExperience.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalExperience.lastPlacesOfWorks = req.body.lastPlacesOfWorks;
     personalExperience.experience[req.body.locale] = JSON.stringify(req.body.experience);
     personalExperience.set('userId', req.body.userId);
@@ -59,7 +59,7 @@ export const update = async (req, res) => {
     const personalExperienceId = req.params.id;
     const personalExperience = await PersonalExperienceModel.findById(personalExperienceId);
 
-    personalExperience.sectionTitle[req.body.locale] = req.body.sectionTitle;
+    personalExperience.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalExperience.lastPlacesOfWorks = req.body.lastPlacesOfWorks;
     personalExperience.experience[req.body.locale] = JSON.stringify(req.body.experience);
     personalExperience.set('userId', req.body.userId);

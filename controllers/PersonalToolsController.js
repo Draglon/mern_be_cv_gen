@@ -29,6 +29,7 @@ export const create = async (req, res) => {
   try {
     const personalTools = new PersonalToolsModel();
 
+    personalTools.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalTools.tools[req.body.locale] = JSON.stringify(req.body.tools);
     personalTools.set('userId', req.body.userId);
 
@@ -57,6 +58,7 @@ export const update = async (req, res) => {
     const personalToolsId = req.params.id;
     const personalTools = await PersonalToolsModel.findById(personalToolsId);
 
+    personalTools.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalTools.tools[req.body.locale] = JSON.stringify(req.body.tools);
     personalTools.set('userId', req.body.userId);
 

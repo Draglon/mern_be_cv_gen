@@ -28,6 +28,7 @@ export const create = async (req, res) => {
   try {
     const personalHobbies = new PersonalHobbiesModel();
 
+    personalHobbies.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
     personalHobbies.set('userId', req.body.userId);
 
@@ -56,6 +57,7 @@ export const update = async (req, res) => {
     const personalHobbiesId = req.params.id;
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
 
+    personalHobbies.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
     personalHobbies.set('userId', req.body.userId);
 

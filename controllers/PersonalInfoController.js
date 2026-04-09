@@ -28,7 +28,7 @@ export const create = async (req, res) => {
   try {
     const personalInfo = new PersonalInfoModel();
 
-    personalInfo.sectionTitle[req.body.locale] = req.body.sectionTitle;
+    personalInfo.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalInfo.firstName[req.body.locale] = req.body.firstName;
     personalInfo.lastName[req.body.locale] = req.body.lastName;
     personalInfo.about[req.body.locale] = req.body.about;
@@ -67,7 +67,7 @@ export const update = async (req, res) => {
     const personalInfoId = req.params.id;
     const personalInfo = await PersonalInfoModel.findById(personalInfoId);
 
-    personalInfo.sectionTitle[req.body.locale] = req.body.sectionTitle;
+    personalInfo.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalInfo.firstName[req.body.locale] = req.body.firstName;
     personalInfo.lastName[req.body.locale] = req.body.lastName;
     personalInfo.about[req.body.locale] = req.body.about;

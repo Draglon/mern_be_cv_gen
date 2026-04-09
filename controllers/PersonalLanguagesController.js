@@ -29,6 +29,7 @@ export const create = async (req, res) => {
   try {
     const personalLanguages = new PersonalLanguagesModel();
 
+    personalLanguages.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalLanguages.languages[req.body.locale] = JSON.stringify(req.body.languages);
     personalLanguages.set('userId', req.body.userId);
 
@@ -57,6 +58,7 @@ export const update = async (req, res) => {
     const personalLanguagesId = req.params.id;
     const personalLanguages = await PersonalLanguagesModel.findById(personalLanguagesId);
 
+    personalLanguages.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
     personalLanguages.languages[req.body.locale] = JSON.stringify(req.body.languages);
     personalLanguages.set('userId', req.body.userId);
 
