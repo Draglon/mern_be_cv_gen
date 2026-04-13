@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken'
 
+import getError from './getError.js';
+
 export default (req, res, next) => {
   const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
 
@@ -10,13 +12,9 @@ export default (req, res, next) => {
       req.userId = decoded._id;
       next();
     } catch(error) {
-      return res.status(403).json({
-        message: 'Нет доступа',
-      })
+      return getError(res, 403, { message: 'Нет доступа', error });
     }
   } else {
-    res.status(403).json({
-      message: 'Нет доступа'
-    })
+    getError(res, 403, { message: 'Нет доступа' });
   }
 }
