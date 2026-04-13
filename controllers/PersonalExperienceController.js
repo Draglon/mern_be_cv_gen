@@ -1,3 +1,4 @@
+import getError from '../utils/getError.js';
 import PersonalExperienceModel from '../models/PersonalExperience.js'
 import UserModel from '../models/User.js'
 
@@ -8,20 +9,15 @@ export const fetch = async (req, res) => {
     const personalExperience = await PersonalExperienceModel.findById(personalExperienceId)
 
     if (!personalExperience) {
-      return res.status(404).json({
-        message: 'Персональный опыт работы.',
-      })
+      return getError(res, 404, { message: 'Персональный опыт работы не найден.' });
     }
 
     const personalExperienceData = personalExperience._doc;
 
     res.json({ ...personalExperienceData })
   } catch (error) {
-    console.log(error)
-
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    console.log(error);
+    getError(res, 500, { message: 'Ошибка при получении данных', error });
   }
 }
 
@@ -29,7 +25,7 @@ export const create = async (req, res) => {
   try {
     const personalExperience = new PersonalExperienceModel();
 
-    personalExperience.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    personalExperience.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalExperience.lastPlacesOfWorks = req.body.lastPlacesOfWorks;
     personalExperience.experience[req.body.locale] = JSON.stringify(req.body.experience);
     personalExperience.set('userId', req.body.userId);
@@ -47,10 +43,7 @@ export const create = async (req, res) => {
     res.json(personalExperienceData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось создать персональную информацию опыта работы'
-    })
+    getError(res, 500, { message: 'Ошибка при создании данных', error });
   }
 }
 
@@ -59,7 +52,11 @@ export const update = async (req, res) => {
     const personalExperienceId = req.params.id;
     const personalExperience = await PersonalExperienceModel.findById(personalExperienceId);
 
-    personalExperience.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    if (!personalExperience) {
+      return getError(res, 404, { message: 'Персональный опыт работы не найден.' });
+    }
+
+    personalExperience.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalExperience.lastPlacesOfWorks = req.body.lastPlacesOfWorks;
     personalExperience.experience[req.body.locale] = JSON.stringify(req.body.experience);
     personalExperience.set('userId', req.body.userId);
@@ -69,9 +66,6 @@ export const update = async (req, res) => {
     res.json(personalExperienceData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось обновить информацию опыта работы'
-    })
+    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
   }
 }

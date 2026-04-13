@@ -1,3 +1,4 @@
+import getError from '../utils/getError.js';
 import PersonalToolsModel from '../models/PersonalTools.js'
 import UserModel from '../models/User.js'
 
@@ -8,9 +9,7 @@ export const fetch = async (req, res) => {
     const personalTools = await PersonalToolsModel.findById(personalToolsId)
 
     if (!personalTools) {
-      return res.status(404).json({
-        message: 'Персональные инструменты не найдены.',
-      })
+      return getError(res, 404, { message: 'Персональные инструменты не найдены.' });
     }
 
     const personalToolsData = personalTools._doc;
@@ -18,10 +17,7 @@ export const fetch = async (req, res) => {
     res.json({ ...personalToolsData })
   } catch (error) {
     console.log(error)
-
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    getError(res, 500, { message: 'Ошибка при получении данных', error });
   }
 }
 
@@ -29,7 +25,7 @@ export const create = async (req, res) => {
   try {
     const personalTools = new PersonalToolsModel();
 
-    personalTools.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    personalTools.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalTools.tools[req.body.locale] = JSON.stringify(req.body.tools);
     personalTools.set('userId', req.body.userId);
 
@@ -46,10 +42,7 @@ export const create = async (req, res) => {
     res.json(personalToolsData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось создать персональную информацию о инструментах.'
-    })
+    getError(res, 500, { message: 'Ошибка при создании данных', error });
   }
 }
 
@@ -58,7 +51,11 @@ export const update = async (req, res) => {
     const personalToolsId = req.params.id;
     const personalTools = await PersonalToolsModel.findById(personalToolsId);
 
-    personalTools.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    if (!personalTools) {
+      return getError(res, 404, { message: 'Персональные инструменты не найдены.' });
+    }
+
+    personalTools.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalTools.tools[req.body.locale] = JSON.stringify(req.body.tools);
     personalTools.set('userId', req.body.userId);
 
@@ -67,9 +64,6 @@ export const update = async (req, res) => {
     res.json(personalToolsData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось обновить информацию о инструментах.'
-    })
+    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
   }
 }

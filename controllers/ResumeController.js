@@ -1,3 +1,5 @@
+import getError from '../utils/getError.js';
+
 import UserModel from "../models/User.js";
 import PersonalInfo from "../models/PersonalInfo.js";
 import PersonalHobbies from "../models/PersonalHobbies.js";
@@ -13,9 +15,7 @@ export const fetch = async (req, res) => {
     const user = await UserModel.findById(req.userId);
 
     if (!user) {
-      return res.status(404).json({
-        message: 'Данные не найдены.',
-      })
+      return getError(res, 404, { message: 'Данные не найдены.' });
     }
 
     let personalInfo = null;
@@ -99,10 +99,7 @@ export const fetch = async (req, res) => {
 
     res.json(resumeData);
   } catch (error) {
-    console.log(error)
-
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    console.log(error);
+    getError(res, 500, { message: 'Ошибка при получении данных', error });
   }
 }

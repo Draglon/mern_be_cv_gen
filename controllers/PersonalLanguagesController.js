@@ -1,3 +1,4 @@
+import getError from '../utils/getError.js';
 import PersonalLanguagesModel from '../models/PersonalLanguages.js'
 import UserModel from '../models/User.js'
 
@@ -8,20 +9,15 @@ export const fetch = async (req, res) => {
     const personalLanguages = await PersonalLanguagesModel.findById(personalLanguagesId)
 
     if (!personalLanguages) {
-      return res.status(404).json({
-        message: 'Персональные языки не найдены',
-      })
+      return getError(res, 404, { message: 'Персональные языки не найдены.' });
     }
 
     const personalLanguagesData = personalLanguages._doc;
 
     res.json({ ...personalLanguagesData })
   } catch (error) {
-    console.log(error)
-
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    console.log(error);
+    getError(res, 500, { message: 'Ошибка при получении данных', error });
   }
 }
 
@@ -29,7 +25,7 @@ export const create = async (req, res) => {
   try {
     const personalLanguages = new PersonalLanguagesModel();
 
-    personalLanguages.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    personalLanguages.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalLanguages.languages[req.body.locale] = JSON.stringify(req.body.languages);
     personalLanguages.set('userId', req.body.userId);
 
@@ -46,10 +42,7 @@ export const create = async (req, res) => {
     res.json(personalLanguagesData);
  } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось создать персональную информацию о знании иностранных языков'
-    })
+    getError(res, 500, { message: 'Ошибка при создании данных', error });
   }
 }
 
@@ -58,7 +51,11 @@ export const update = async (req, res) => {
     const personalLanguagesId = req.params.id;
     const personalLanguages = await PersonalLanguagesModel.findById(personalLanguagesId);
 
-    personalLanguages.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    if (!personalLanguages) {
+      return getError(res, 404, { message: 'Персональные языки не найдены.' });
+    }
+
+    personalLanguages.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalLanguages.languages[req.body.locale] = JSON.stringify(req.body.languages);
     personalLanguages.set('userId', req.body.userId);
 
@@ -67,9 +64,6 @@ export const update = async (req, res) => {
     res.json(personalLanguagesData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось обновить языки'
-    })
+    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
   }
 }

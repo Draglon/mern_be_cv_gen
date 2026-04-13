@@ -1,3 +1,4 @@
+import getError from '../utils/getError.js';
 import PersonalInfoModel from '../models/PersonalInfo.js';
 import UserModel from '../models/User.js';
 
@@ -7,9 +8,7 @@ export const fetch = async (req, res) => {
     const personalInfo = await PersonalInfoModel.findById(personalInfoId);
 
     if (!personalInfo) {
-      return res.status(404).json({
-        message: 'Персональная информация не найденa',
-      })
+      return getError(res, 404, { message: 'Персональная информация не найденa.' });
     }
 
     const personalInfoData = personalInfo._doc;
@@ -17,10 +16,7 @@ export const fetch = async (req, res) => {
     res.json(personalInfoData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    getError(res, 500, { message: 'Ошибка при получении данных', error });
   }
 }
 
@@ -28,7 +24,7 @@ export const create = async (req, res) => {
   try {
     const personalInfo = new PersonalInfoModel();
 
-    personalInfo.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    personalInfo.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalInfo.firstName[req.body.locale] = req.body.firstName;
     personalInfo.lastName[req.body.locale] = req.body.lastName;
     personalInfo.about[req.body.locale] = req.body.about;
@@ -55,10 +51,7 @@ export const create = async (req, res) => {
     res.json(personalInfoData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось создать персональную информацию'
-    })
+    getError(res, 500, { message: 'Ошибка при создании данных', error });
   }
 }
 
@@ -67,7 +60,11 @@ export const update = async (req, res) => {
     const personalInfoId = req.params.id;
     const personalInfo = await PersonalInfoModel.findById(personalInfoId);
 
-    personalInfo.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    if (!personalInfo) {
+      return getError(res, 404, { message: 'Персональная информация не найденa.' });
+    }
+
+    personalInfo.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalInfo.firstName[req.body.locale] = req.body.firstName;
     personalInfo.lastName[req.body.locale] = req.body.lastName;
     personalInfo.about[req.body.locale] = req.body.about;
@@ -86,9 +83,6 @@ export const update = async (req, res) => {
     res.json(personalInfoData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось обновить'
-    })
+    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
   }
 }

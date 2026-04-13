@@ -1,3 +1,4 @@
+import getError from '../utils/getError.js';
 import PersonalHobbiesModel from '../models/PersonalHobbies.js'
 import UserModel from '../models/User.js'
 
@@ -7,20 +8,15 @@ export const fetch = async (req, res) => {
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId)
 
     if (!personalHobbies) {
-      return res.status(404).json({
-        message: 'Персональная информация по интересам не найденa',
-      })
+      return getError(res, 404, { message: 'Персональная информация по интересам не найденa.' });
     }
 
     const personalHobbiesData = personalHobbies._doc;
 
     res.json(personalHobbiesData)
   } catch (error) {
-    console.log(error)
-
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    console.log(error);
+    getError(res, 500, { message: 'Ошибка при получении данных', error });
   }
 }
 
@@ -28,7 +24,7 @@ export const create = async (req, res) => {
   try {
     const personalHobbies = new PersonalHobbiesModel();
 
-    personalHobbies.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    personalHobbies.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
     personalHobbies.set('userId', req.body.userId);
 
@@ -45,10 +41,7 @@ export const create = async (req, res) => {
     res.json(personalHobbiesData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось создать персональную информацию о интересах и хобби'
-    })
+    getError(res, 500, { message: 'Ошибка при создании данных', error });
   }
 }
 
@@ -57,7 +50,11 @@ export const update = async (req, res) => {
     const personalHobbiesId = req.params.id;
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
 
-    personalHobbies.sectionTitle[req.body.locale] = req.body.sectionTitle ? req.body.sectionTitle : undefined;
+    if (!personalHobbies) {
+      return getError(res, 404, { message: 'Персональная информация по интересам не найденa.' });
+    }
+
+    personalHobbies.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
     personalHobbies.set('userId', req.body.userId);
 
@@ -66,9 +63,6 @@ export const update = async (req, res) => {
     res.json(personalHobbiesData);
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: 'Не удалось обновить интересы'
-    })
+    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
   }
 }
