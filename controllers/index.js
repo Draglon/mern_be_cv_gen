@@ -1,4 +1,5 @@
 export * as UserController from "./UserController.js";
+export * as SettingsController from "./SettingsController.js";
 export * as ResumeController from "./ResumeController.js";
 export * as PersonalInfoController from "./PersonalInfoController.js";
 export * as PersonalHobbiesController from "./PersonalHobbiesController.js";

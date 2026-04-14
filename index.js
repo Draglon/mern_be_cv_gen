@@ -18,6 +18,7 @@ import {
 } from "./validations/personalValidations.js";
 import {
   UserController,
+  SettingsController,
   ResumeController,
   PersonalInfoController,
   PersonalHobbiesController,
@@ -60,11 +61,11 @@ app.use(cors());
 app.use('/uploads/avatars', express.static('uploads/avatars'));
 
 // login
-app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
+app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 // registration
-app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register)
+app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register);
 // general information by user
-app.get('/auth/user', checkAuth, UserController.getMe)
+app.get('/auth/user', checkAuth, UserController.getMe);
 // upload avatar
 app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
   res.json({
@@ -72,41 +73,44 @@ app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
   })
 });
 
+// Settings
+app.delete('/users/:id', checkAuth, handleValidationErrors, SettingsController.removeUser);
+
 // Resume
-app.get('/resume/:userId', checkAuth, ResumeController.fetch)
+app.get('/resume/:userId', checkAuth, ResumeController.fetch);
 
 // Personal info
-app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create)
-app.get('/personal_info/:id', checkAuth, PersonalInfoController.fetch)
-app.patch('/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update)
+app.post('/personal_info', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.create);
+app.get('/personal_info/:id', checkAuth, PersonalInfoController.fetch);
+app.patch('/personal_info/:id', checkAuth, personalInfoValidation, handleValidationErrors, PersonalInfoController.update);
 // Personal hobbies
-app.post('/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create)
-app.get('/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch)
-app.patch('/personal_hobbies/:id', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.update)
+app.post('/personal_hobbies', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.create);
+app.get('/personal_hobbies/:id', checkAuth, PersonalHobbiesController.fetch);
+app.patch('/personal_hobbies/:id', checkAuth, personalHobbiesValidation, handleValidationErrors, PersonalHobbiesController.update);
 // Personal languages
-app.post('/personal_languages', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.create)
-app.get('/personal_languages/:id', checkAuth, PersonalLanguagesController.fetch)
-app.patch('/personal_languages/:id', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.update)
+app.post('/personal_languages', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.create);
+app.get('/personal_languages/:id', checkAuth, PersonalLanguagesController.fetch);
+app.patch('/personal_languages/:id', checkAuth, personalLanguagesValidation, handleValidationErrors, PersonalLanguagesController.update);
 // Personal experience
-app.post('/personal_experience', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.create)
-app.get('/personal_experience/:id', checkAuth, PersonalExperienceController.fetch)
-app.patch('/personal_experience/:id', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.update)
+app.post('/personal_experience', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.create);
+app.get('/personal_experience/:id', checkAuth, PersonalExperienceController.fetch);
+app.patch('/personal_experience/:id', checkAuth, personalExperienceValidation, handleValidationErrors, PersonalExperienceController.update);
 // Personal education
-app.post('/personal_education', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.create)
-app.get('/personal_education/:id', checkAuth, PersonalEducationController.fetch)
-app.patch('/personal_education/:id', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.update)
+app.post('/personal_education', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.create);
+app.get('/personal_education/:id', checkAuth, PersonalEducationController.fetch);
+app.patch('/personal_education/:id', checkAuth, personalEducationValidation, handleValidationErrors, PersonalEducationController.update);
 // Personal courses
-app.post('/personal_courses', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.create)
-app.get('/personal_courses/:id', checkAuth, PersonalCoursesController.fetch)
-app.patch('/personal_courses/:id', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.update)
+app.post('/personal_courses', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.create);
+app.get('/personal_courses/:id', checkAuth, PersonalCoursesController.fetch);
+app.patch('/personal_courses/:id', checkAuth, personalCoursesValidation, handleValidationErrors, PersonalCoursesController.update);
 // Personal skills
-app.post('/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create)
-app.get('/personal_skills/:id', checkAuth, PersonalSkillsController.fetch)
-app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update)
+app.post('/personal_skills', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.create);
+app.get('/personal_skills/:id', checkAuth, PersonalSkillsController.fetch);
+app.patch('/personal_skills/:id', checkAuth, personalSkillsValidation, handleValidationErrors, PersonalSkillsController.update);
 // Personal tools
-app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create)
-app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch)
-app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update)
+app.post('/personal_tools', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.create);
+app.get('/personal_tools/:id', checkAuth, PersonalToolsController.fetch);
+app.patch('/personal_tools/:id', checkAuth, personalToolsValidation, handleValidationErrors, PersonalToolsController.update);
 
 // Start server
 app.listen(process.env.PORT || 4000, (error) => {
