@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 import getError from '../utils/getError.js';
 import getResponse from '../utils/getResponse.js';
+import getToken from '../utils/getToken.js';
 import checkEmailExists from '../utils/checkEmailExists.js';
 import UserModel from "../models/User.js";
 
@@ -19,21 +19,10 @@ export const login = async (req, res) => {
     const isValidPass = await bcrypt.compare(password, user._doc.passwordHash);
 
     if (!isValidPass) {
-      return res.status(400).json({
-        message: 'Invalid email or password.',
-      })
+      return res.status(401).json({ message: 'Invalid email or password.' })
     }
 
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      'secret123',
-      {
-        expiresIn: '30d',
-      }
-    );
-
+    const token = getToken(user._id);
     const { passwordHash, ...userData } = user._doc;
 
     getResponse(res, 200, { ...userData, token });
@@ -62,7 +51,7 @@ export const register = async (req, res) => {
     })
 
     const user = await doc.save();
-    const token = jwt.sign({ _id: user._id }, 'secret123', { expiresIn: '30d' });
+    const token = getToken(user._id);
 
     getResponse(res, 200, { ...user, token });
   }
