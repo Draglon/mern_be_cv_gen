@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import getError from '../utils/getError.js';
+import getResponse from '../utils/getResponse.js';
 import checkEmailExists from '../utils/checkEmailExists.js';
 import UserModel from "../models/User.js";
 
@@ -35,7 +36,7 @@ export const login = async (req, res) => {
 
     const { passwordHash, ...userData } = user._doc;
 
-    getError(res, 200, { message: 'The user has logged in successfully.', ...userData, token });
+    getResponse(res, 200, { ...userData, token });
   }
   catch (error) {
     console.log(error);
@@ -63,7 +64,7 @@ export const register = async (req, res) => {
     const user = await doc.save();
     const token = jwt.sign({ _id: user._id }, 'secret123', { expiresIn: '30d' });
 
-    getError(res, 200, { message: 'User created successfully', ...user, token });
+    getResponse(res, 200, { ...user, token });
   }
   catch (error) {
     console.log(error);
@@ -81,7 +82,7 @@ export const getMe = async (req, res) => {
 
     const { passwordHash, ...userData } = user._doc;
 
-    getError(res, 200, { message: 'User data received successfully.', ...userData });
+    getResponse(res, 200, { ...userData });
   } catch (error) {
     console.log(error);
     getError(res, 500, { message: 'Server error.', error });
