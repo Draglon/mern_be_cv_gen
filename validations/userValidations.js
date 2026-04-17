@@ -9,12 +9,12 @@ import {
 } from "../lib/constants/index.js";
 
 export const loginValidation = [
-  body('email', 'Неверный формат почты').trim().isEmail().isLength({ max: MAX_EMAIL_LENGTH }),
-  body('password', 'Пароль должен быть минимум 6 символов').isLength({ min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH }),
+  body('email', `Invalid email format or email cannot exceed ${MAX_EMAIL_LENGTH} characters!`).trim().isEmail().isLength({ max: MAX_EMAIL_LENGTH }),
+  body('password', `Password must be between ${MIN_PASSWORD_LENGTH} and ${MAX_PASSWORD_LENGTH} characters!`).isLength({ min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH }),
 ];
 
 export const registerValidation = [
-  body('email', 'Неверный формат почты').trim().isEmail().isLength({ max: MAX_EMAIL_LENGTH }),
-  body('password', 'Пароль должен быть минимум 6 символов').isLength({ min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH }),
-  body('userName', 'Имя пользователя должно быть минимум 3 символа').isLength({ min: MIN_NIKE_NAME_LENGTH, max: MAX_NIKE_NAME_LENGTH }),
+  body('email', `Invalid email format or email cannot exceed ${MAX_EMAIL_LENGTH} characters!`).trim().isEmail().isLength({ max: MAX_EMAIL_LENGTH }),
+  body('password', `Password must be between ${MIN_PASSWORD_LENGTH} and ${MAX_PASSWORD_LENGTH} characters!`).isLength({ min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH }),
+  body('userName', `Username must be between ${MIN_NIKE_NAME_LENGTH} and ${MAX_NIKE_NAME_LENGTH} characters!`).isLength({ min: MIN_NIKE_NAME_LENGTH, max: MAX_NIKE_NAME_LENGTH }),
 ];
