@@ -61,7 +61,7 @@ export const register = async (req, res) => {
   }
 }
 
-export const getMe = async (req, res) => {
+export const fetchUser = async (req, res) => {
   try {
     const user = await UserModel.findById(req.userId);
 

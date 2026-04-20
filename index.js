@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import multer from "multer";
-import bodyParser from "body-parser";
+// import multer from "multer";
+// import bodyParser from "body-parser";
 import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
@@ -42,39 +42,40 @@ mongoose
 //   .catch((err) => { console.log('DB error', err) });
 
 const app = express();
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(null, 'uploads/avatars');
-  },
-  filename: (_, file, cb) => {
-    cb(null, file.originalname); 
-  }
-})
+// const storage = multer.diskStorage({
+//   destination: (_, __, cb) => {
+//     cb(null, 'uploads/avatars');
+//   },
+//   filename: (_, file, cb) => {
+//     cb(null, file.originalname); 
+//   }
+// })
 
-const upload = multer({ storage: storage, limits: { fileSize: 100000000 }});
+// const upload = multer({ storage: storage, limits: { fileSize: 100000000 }});s
 
-app.use(bodyParser.json({limit: "100mb", parameterLimit: 100000000}));
-app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit: 100000000}));
+// app.use(bodyParser.json({limit: "100mb", parameterLimit: 100000000}));
+// app.use(bodyParser.urlencoded({limit: '100mb', extended: true, parameterLimit: 100000000}));
 
 app.use(express.json()); // reads JSON requests
 app.use(cors());
-app.use('/uploads/avatars', express.static('uploads/avatars'));
+// app.use('/uploads/avatars', express.static('uploads/avatars'));
 
 // login
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 // registration
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register);
 // general information by user
-app.get('/auth/user', checkAuth, UserController.getMe);
-// upload avatar
-app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
-  res.json({
-    url: `/uploads/avatars/${req.file.originalname}`
-  })
-});
+app.get('/auth/user', checkAuth, UserController.fetchUser);
 
-// Settings
-app.delete('/users/:id', checkAuth, handleValidationErrors, SettingsController.removeUser);
+// settings - remove account
+app.delete('/users/:userId', checkAuth, handleValidationErrors, SettingsController.removeAccount);
+
+// upload avatar
+// app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
+//   res.json({
+//     url: `/uploads/avatars/${req.file.originalname}`
+//   })
+// });
 
 // Resume
 app.get('/resume/:userId', checkAuth, ResumeController.fetch);

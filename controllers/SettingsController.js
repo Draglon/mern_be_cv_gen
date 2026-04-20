@@ -10,13 +10,13 @@ import PersonalCourses from "../models/PersonalCourses.js";
 import PersonalSkills from "../models/PersonalSkills.js";
 import PersonalTools from "../models/PersonalTools.js";
 
-export const removeUser = async (req, res) => {
+export const removeAccount = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.userId;
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      return getError(res, 404, { message: 'Пользователь не найден.' });
+      return getError(res, 404, { message: 'User not found!' });
     }
 
     await UserModel.findByIdAndDelete(userId);
@@ -46,10 +46,10 @@ export const removeUser = async (req, res) => {
       await PersonalTools.findByIdAndDelete(user.personalToolsId);
     }
 
-    getError(res, 200, { message: 'Пользователь успешно удален.' });
+    getError(res, 200, { message: 'The user account has been successfully deleted!' });
   }
   catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Не удалось авторизоваться', error });
+    getError(res, 500, { message: 'Server error!', error });
   }
 }
