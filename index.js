@@ -6,7 +6,7 @@ import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation, profileValidation } from "./validations/userValidations.js";
-import { deleteAccountValidation } from "./validations/settingsValidations.js";
+import { deleteAccountValidation, changeEmailValidation } from "./validations/settingsValidations.js";
 import {
   personalInfoValidation,
   personalHobbiesValidation,
@@ -61,6 +61,13 @@ app.use(express.json()); // reads JSON requests
 app.use(cors());
 // app.use('/uploads/avatars', express.static('uploads/avatars'));
 
+// upload avatar
+// app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
+//   res.json({
+//     url: `/uploads/avatars/${req.file.originalname}`
+//   })
+// });
+
 // login
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 // registration
@@ -71,13 +78,7 @@ app.get('/auth/user', checkAuth, UserController.fetchUser);
 app.patch('/users/:userId', checkAuth, profileValidation, handleValidationErrors, UserController.updateUser);
 // settings - delete account
 app.delete('/users/:userId', checkAuth, deleteAccountValidation, handleValidationErrors, SettingsController.deleteAccount);
-
-// upload avatar
-// app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {
-//   res.json({
-//     url: `/uploads/avatars/${req.file.originalname}`
-//   })
-// });
+app.patch('/users/:userId/email', checkAuth, changeEmailValidation, handleValidationErrors, SettingsController.updateUserEmail);
 
 // Resume
 app.get('/resume/:userId', checkAuth, ResumeController.fetch);

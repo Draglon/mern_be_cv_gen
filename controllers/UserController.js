@@ -88,10 +88,12 @@ export const updateUser = async (req, res) => {
       return getError(res, 404, { message: 'User not found!' });
     }
 
-    user.set('avatarUrl', avatarUrl);
-    user.set('firstName', firstName);
-    user.set('lastName', lastName);
-    user.set('userName', userName);
+    await UserModel.findByIdAndUpdate(userId, {
+      avatarUrl,
+      firstName,
+      lastName,
+      userName,
+    });
 
     const userData = await user.save();
 

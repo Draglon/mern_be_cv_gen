@@ -1,4 +1,7 @@
 import getError from '../utils/getError.js';
+import getResponse from '../utils/getResponse.js';
+import checkEmailExists from '../utils/checkEmailExists.js';
+import checkPassword from '../utils/checkPassword.js';
 
 import UserModel from "../models/User.js";
 import PersonalInfoModel from "../models/PersonalInfo.js";
@@ -51,10 +54,40 @@ export const deleteAccount = async (req, res) => {
       await PersonalToolsModel.findByIdAndDelete(user.personalToolsId);
     }
 
-    getError(res, 200, { message: 'The user account has been successfully deleted!' });
+    getResponse(res, 200, { message: 'The user account has been successfully deleted!', success: true });
   }
   catch (error) {
     console.log(error);
     getError(res, 500, { message: 'Server error!', error });
+  }
+}
+
+export const updateUserEmail = async (req, res) => {
+  try {
+    const { newEmail, password } = req.body;
+    const { userId } = req.params;
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return getError(res, 404, { message: 'User not found!' });
+    }
+
+    const isEmailExists = checkEmailExists(newEmail);
+    const isPasswordMatch = checkPassword(password, user);
+
+    if (!isEmailExists) {
+      return getError(res, 401, { message: 'Email already exists!' });
+    }
+
+    if (!isPasswordMatch) {
+      return getError(res, 409, { message: 'Incorrect password!' });
+    }
+
+    await UserModel.findByIdAndUpdate(userId, { email: newEmail });
+
+    getResponse(res, 200, { success: true });
+  } catch (error) {
+    console.log(error);
+    getError(res, 500, { message: 'Server error! Failed to update email!', error });
   }
 }
