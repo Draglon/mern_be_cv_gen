@@ -72,10 +72,10 @@ export const updateUserEmail = async (req, res) => {
       return getError(res, 404, { message: 'User not found!' });
     }
 
-    const isEmailExists = checkEmailExists(newEmail);
-    const isPasswordMatch = checkPassword(password, user);
+    const isEmailExists = await checkEmailExists(newEmail);
+    const isPasswordMatch = await checkPassword(password, user);
 
-    if (!isEmailExists) {
+    if (isEmailExists) {
       return getError(res, 401, { message: 'Email already exists!' });
     }
 

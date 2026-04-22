@@ -4,6 +4,7 @@ import getError from '../utils/getError.js';
 import getResponse from '../utils/getResponse.js';
 import getToken from '../utils/getToken.js';
 import checkEmailExists from '../utils/checkEmailExists.js';
+import checkPassword from '../utils/checkPassword.js';
 import UserModel from "../models/User.js";
 
 export const login = async (req, res) => {
@@ -16,9 +17,9 @@ export const login = async (req, res) => {
       return getError(res, 404, { message: 'User not found!' });
     }
 
-    const isValidPass = await bcrypt.compare(password, user._doc.passwordHash);
+    const isPasswordMatch = await checkPassword(password, user._doc);
 
-    if (!isValidPass) {
+    if (!isPasswordMatch) {
       return res.status(401).json({ message: 'Invalid email or password!' })
     }
 
