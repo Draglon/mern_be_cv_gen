@@ -12,7 +12,6 @@ import {
   REGEX_LETTERS,
   REGEX_MANE,
   REGEX_USER_MANE,
-  // REGEX_IMAGE_FORMATS,
 } from "../lib/constants/index.js";
 
 export const loginValidation = [
@@ -66,14 +65,6 @@ export const profileValidation = [
     .isURL()
     .withMessage('Avatar must be a valid URL!')
     .bail(),
-    // .custom((value) => {
-    //   const url = new URL(value);
-    //   const isImage = REGEX_IMAGE_FORMATS.test(url.pathname);
-    //   if (!isImage) {
-    //     throw new Error('Avatar must be an image URL!');
-    //   }
-    //   return true;
-    // }),
 
   body('firstName')
     .optional({ values: 'falsy' })

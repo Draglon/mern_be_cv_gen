@@ -2,6 +2,7 @@ import getError from '../utils/getError.js';
 import getResponse from '../utils/getResponse.js';
 import checkEmailExists from '../utils/checkEmailExists.js';
 import checkPassword from '../utils/checkPassword.js';
+import getPasswordHash from '../utils/getPasswordHash.js';
 
 import UserModel from "../models/User.js";
 import PersonalInfoModel from "../models/PersonalInfo.js";
@@ -89,5 +90,33 @@ export const updateUserEmail = async (req, res) => {
   } catch (error) {
     console.log(error);
     getError(res, 500, { message: 'Server error! Failed to update email!', error });
+  }
+}
+
+export const updateUserPassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const { userId } = req.params;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return getError(res, 404, { message: 'User not found!' });
+    }
+
+    const isCurrentPasswordMatch = await checkPassword(currentPassword, user);
+
+    if (!isCurrentPasswordMatch) {
+      return res.status(400).json({ message: 'Incorrect current password' });
+    }
+
+    const passwordHash = await getPasswordHash(newPassword);
+
+    await UserModel.findByIdAndUpdate(userId, { passwordHash });
+
+    getResponse(res, 200, { success: true });
+  } catch (error) {
+    console.log(error);
+    getError(res, 500, { message: 'Server error! Failed to update password!', error });
   }
 }

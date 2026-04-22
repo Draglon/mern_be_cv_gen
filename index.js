@@ -6,7 +6,7 @@ import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 import { registerValidation, loginValidation, profileValidation } from "./validations/userValidations.js";
-import { deleteAccountValidation, changeEmailValidation } from "./validations/settingsValidations.js";
+import { deleteAccountValidation, changeEmailValidation, changePasswordValidation } from "./validations/settingsValidations.js";
 import {
   personalInfoValidation,
   personalHobbiesValidation,
@@ -79,6 +79,7 @@ app.patch('/users/:userId', checkAuth, profileValidation, handleValidationErrors
 // settings - delete account
 app.delete('/users/:userId', checkAuth, deleteAccountValidation, handleValidationErrors, SettingsController.deleteAccount);
 app.patch('/users/:userId/email', checkAuth, changeEmailValidation, handleValidationErrors, SettingsController.updateUserEmail);
+app.patch('/users/:userId/password', checkAuth, changePasswordValidation, handleValidationErrors, SettingsController.updateUserPassword);
 
 // Resume
 app.get('/resume/:userId', checkAuth, ResumeController.fetch);
