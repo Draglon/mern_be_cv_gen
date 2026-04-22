@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 import cors from 'cors';
 
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
-import { registerValidation, loginValidation } from "./validations/userValidations.js";
+import { registerValidation, loginValidation, profileValidation } from "./validations/userValidations.js";
+import { deleteAccountValidation } from "./validations/settingsValidations.js";
 import {
   personalInfoValidation,
   personalHobbiesValidation,
@@ -66,9 +67,10 @@ app.post('/auth/login', loginValidation, handleValidationErrors, UserController.
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register);
 // general information by user
 app.get('/auth/user', checkAuth, UserController.fetchUser);
-
-// settings - remove account
-app.delete('/users/:userId', checkAuth, handleValidationErrors, SettingsController.removeAccount);
+// profile
+app.patch('/users/:userId', checkAuth, profileValidation, handleValidationErrors, UserController.updateUser);
+// settings - delete account
+app.delete('/users/:userId', checkAuth, deleteAccountValidation, handleValidationErrors, SettingsController.deleteAccount);
 
 // upload avatar
 // app.post('/upload_avatar', checkAuth, upload.single('image'), (req, res) => {

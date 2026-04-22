@@ -1,21 +1,21 @@
 import getError from '../utils/getError.js';
 
 import UserModel from "../models/User.js";
-import PersonalInfo from "../models/PersonalInfo.js";
-import PersonalHobbies from "../models/PersonalHobbies.js";
-import PersonalLanguages from "../models/PersonalLanguages.js";
-import PersonalExperience from "../models/PersonalExperience.js";
-import PersonalEducation from "../models/PersonalEducation.js";
-import PersonalCourses from "../models/PersonalCourses.js";
-import PersonalSkills from "../models/PersonalSkills.js";
-import PersonalTools from "../models/PersonalTools.js";
+import PersonalInfoModel from "../models/PersonalInfo.js";
+import PersonalHobbiesModel from "../models/PersonalHobbies.js";
+import PersonalLanguagesModel from "../models/PersonalLanguages.js";
+import PersonalExperienceModel from "../models/PersonalExperience.js";
+import PersonalEducationModel from "../models/PersonalEducation.js";
+import PersonalCoursesModel from "../models/PersonalCourses.js";
+import PersonalSkillsModel from "../models/PersonalSkills.js";
+import PersonalToolsModel from "../models/PersonalTools.js";
 
 export const fetch = async (req, res) => {
   try {
     const user = await UserModel.findById(req.userId);
 
     if (!user) {
-      return getError(res, 404, { message: 'Данные не найдены.' });
+      return getError(res, 404, { message: 'User not found!' });
     }
 
     let personalInfo = null;
@@ -28,28 +28,28 @@ export const fetch = async (req, res) => {
     let personalTools = null;
 
     if (user.personalInfoId) {
-      personalInfo = await PersonalInfo.findById(user.personalInfoId);
+      personalInfo = await PersonalInfoModel.findById(user.personalInfoId);
     }
     if (user.personalHobbiesId) {
-      personalHobbies = await PersonalHobbies.findById(user.personalHobbiesId);
+      personalHobbies = await PersonalHobbiesModel.findById(user.personalHobbiesId);
     }
     if (user.personalLanguagesId) {
-      personalLanguages = await PersonalLanguages.findById(user.personalLanguagesId);
+      personalLanguages = await PersonalLanguagesModel.findById(user.personalLanguagesId);
     }
     if (user.personalExperienceId) {
-      personalExperience = await PersonalExperience.findById(user.personalExperienceId);
+      personalExperience = await PersonalExperienceModel.findById(user.personalExperienceId);
     }
     if (user.personalEducationId) {
-      personalEducation = await PersonalEducation.findById(user.personalEducationId);
+      personalEducation = await PersonalEducationModel.findById(user.personalEducationId);
     }
     if (user.personalCoursesId) {
-      personalCourses = await PersonalCourses.findById(user.personalCoursesId);
+      personalCourses = await PersonalCoursesModel.findById(user.personalCoursesId);
     }
     if (user.personalSkillsId) {
-      personalSkills = await PersonalSkills.findById(user.personalSkillsId);
+      personalSkills = await PersonalSkillsModel.findById(user.personalSkillsId);
     }
     if (user.personalToolsId) {
-      personalTools = await PersonalTools.findById(user.personalToolsId);
+      personalTools = await PersonalToolsModel.findById(user.personalToolsId);
     }
 
     const resumeData = {
@@ -100,6 +100,6 @@ export const fetch = async (req, res) => {
     res.json(resumeData);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при получении данных', error });
+    getError(res, 500, { message: 'Server error!', error });
   }
 }

@@ -13,13 +13,13 @@ export const login = async (req, res) => {
     const user = await UserModel.findOne({ email });
 
     if (!user) {
-      return getError(res, 404, { message: 'User not found.' });
+      return getError(res, 404, { message: 'User not found!' });
     }
 
     const isValidPass = await bcrypt.compare(password, user._doc.passwordHash);
 
     if (!isValidPass) {
-      return res.status(401).json({ message: 'Invalid email or password.' })
+      return res.status(401).json({ message: 'Invalid email or password!' })
     }
 
     const token = getToken(user._id);
@@ -29,7 +29,7 @@ export const login = async (req, res) => {
   }
   catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error. Failed to log in.', error });
+    getError(res, 500, { message: 'Server error! Failed to log in!', error });
   }
 }
 
@@ -38,7 +38,7 @@ export const register = async (req, res) => {
 
   try {
     if (await checkEmailExists(email)) {
-      return getError(res, 401, { message: 'Email already exists.' });
+      return getError(res, 401, { message: 'Email already exists!' });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -57,7 +57,7 @@ export const register = async (req, res) => {
   }
   catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error. Failed to register.', error });
+    getError(res, 500, { message: 'Server error! Failed to register!', error });
   }
 }
 
@@ -66,7 +66,7 @@ export const fetchUser = async (req, res) => {
     const user = await UserModel.findById(req.userId);
 
     if (!user) {
-      return getError(res, 404, { message: 'User not found.' });
+      return getError(res, 404, { message: 'User not found!' });
     }
 
     const { passwordHash, ...userData } = user._doc;
@@ -74,6 +74,30 @@ export const fetchUser = async (req, res) => {
     getResponse(res, 200, { ...userData });
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error.', error });
+    getError(res, 500, { message: 'Server error!', error });
+  }
+}
+
+export const updateUser = async (req, res) => {
+  try {
+    const { avatarUrl, firstName, lastName, userName } = req.body;
+    const { userId } = req.params;
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return getError(res, 404, { message: 'User not found!' });
+    }
+
+    user.set('avatarUrl', avatarUrl);
+    user.set('firstName', firstName);
+    user.set('lastName', lastName);
+    user.set('userName', userName);
+
+    const userData = await user.save();
+
+    res.json(userData);
+  } catch (error) {
+    console.log(error);
+    getError(res, 500, { message: 'Server error!', error });
   }
 }

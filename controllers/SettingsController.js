@@ -1,16 +1,16 @@
 import getError from '../utils/getError.js';
 
 import UserModel from "../models/User.js";
-import PersonalInfo from "../models/PersonalInfo.js";
-import PersonalHobbies from "../models/PersonalHobbies.js";
-import PersonalLanguages from "../models/PersonalLanguages.js";
-import PersonalExperience from "../models/PersonalExperience.js";
-import PersonalEducation from "../models/PersonalEducation.js";
-import PersonalCourses from "../models/PersonalCourses.js";
-import PersonalSkills from "../models/PersonalSkills.js";
-import PersonalTools from "../models/PersonalTools.js";
+import PersonalInfoModel from "../models/PersonalInfo.js";
+import PersonalHobbiesModel from "../models/PersonalHobbies.js";
+import PersonalLanguagesModel from "../models/PersonalLanguages.js";
+import PersonalExperienceModel from "../models/PersonalExperience.js";
+import PersonalEducationModel from "../models/PersonalEducation.js";
+import PersonalCoursesModel from "../models/PersonalCourses.js";
+import PersonalSkillsModel from "../models/PersonalSkills.js";
+import PersonalToolsModel from "../models/PersonalTools.js";
 
-export const removeAccount = async (req, res) => {
+export const deleteAccount = async (req, res) => {
   try {
     const userId = req.params.userId;
     const userName = req.query.userName;
@@ -27,28 +27,28 @@ export const removeAccount = async (req, res) => {
     await UserModel.findByIdAndDelete(userId);
 
     if (user.personalInfoId) {
-      await PersonalInfo.findByIdAndDelete(user.personalInfoId);
+      await PersonalInfoModel.findByIdAndDelete(user.personalInfoId);
     }
     if (user.personalHobbiesId) {
-      await PersonalHobbies.findByIdAndDelete(user.personalHobbiesId);
+      await PersonalHobbiesModel.findByIdAndDelete(user.personalHobbiesId);
     }
     if (user.personalLanguagesId) {
-      await PersonalLanguages.findByIdAndDelete(user.personalLanguagesId);
+      await PersonalLanguagesModel.findByIdAndDelete(user.personalLanguagesId);
     }
     if (user.personalExperienceId) {
-      await PersonalExperience.findByIdAndDelete(user.personalExperienceId);
+      await PersonalExperienceModel.findByIdAndDelete(user.personalExperienceId);
     }
     if (user.personalEducationId) {
-      await PersonalEducation.findByIdAndDelete(user.personalEducationId);
+      await PersonalEducationModel.findByIdAndDelete(user.personalEducationId);
     }
     if (user.personalCoursesId) {
-      await PersonalCourses.findByIdAndDelete(user.personalCoursesId);
+      await PersonalCoursesModel.findByIdAndDelete(user.personalCoursesId);
     }
     if (user.personalSkillsId) {
-      await PersonalSkills.findByIdAndDelete(user.personalSkillsId);
+      await PersonalSkillsModel.findByIdAndDelete(user.personalSkillsId);
     }
     if (user.personalToolsId) {
-      await PersonalTools.findByIdAndDelete(user.personalToolsId);
+      await PersonalToolsModel.findByIdAndDelete(user.personalToolsId);
     }
 
     getError(res, 200, { message: 'The user account has been successfully deleted!' });
