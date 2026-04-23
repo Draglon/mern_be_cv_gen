@@ -73,20 +73,21 @@ export const updateUserEmail = async (req, res) => {
       return getError(res, 404, { message: 'User not found!' });
     }
 
-    const isEmailExists = await checkEmailExists(newEmail);
     const isPasswordMatch = await checkPassword(password, user);
+
+    if (!isPasswordMatch) {
+      return getError(res, 400, { message: 'Incorrect password!' });
+    }
+
+    const isEmailExists = await checkEmailExists(newEmail);
 
     if (isEmailExists) {
       return getError(res, 401, { message: 'Email already exists!' });
     }
 
-    if (!isPasswordMatch) {
-      return getError(res, 409, { message: 'Incorrect password!' });
-    }
-
     await UserModel.findByIdAndUpdate(userId, { email: newEmail });
 
-    getResponse(res, 200, { success: true });
+    getResponse(res, 200, { success: true, email: newEmail });
   } catch (error) {
     console.log(error);
     getError(res, 500, { message: 'Server error! Failed to update email!', error });
