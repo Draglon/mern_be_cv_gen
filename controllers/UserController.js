@@ -10,14 +10,18 @@ import UserModel from "../models/User.js";
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log("email: ", email);
+
   try {
     const user = await UserModel.findOne({ email });
+
+    console.log("user: ", user);
 
     if (!user) {
       return getError(res, 404, { message: 'User not found!' });
     }
 
-    const isPasswordMatch = await checkPassword(password, user._doc);
+    const isPasswordMatch = await checkPassword(password, user);
 
     if (!isPasswordMatch) {
       return res.status(401).json({ message: 'Invalid email or password!' })

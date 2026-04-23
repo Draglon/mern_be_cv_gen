@@ -25,7 +25,6 @@ export const deleteAccountValidation = [
 export const changeEmailValidation = [
   body('newEmail')
     .trim()
-    .normalizeEmail()
     .notEmpty()
     .withMessage('Email is required!')
     .isEmail()

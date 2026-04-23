@@ -19,7 +19,6 @@ export const loginValidation = [
     .trim()
     .notEmpty()
     .withMessage('Email is required!')
-    .normalizeEmail()
     .isEmail()
     .withMessage('Invalid email format!')
     .isLength({ max: MAX_EMAIL_LENGTH })
@@ -36,7 +35,6 @@ export const loginValidation = [
 export const registerValidation = [
   body('email')
     .trim()
-    .normalizeEmail()
     .isEmail()
     .withMessage('Invalid email format!')
     .isLength({ max: MAX_EMAIL_LENGTH })
