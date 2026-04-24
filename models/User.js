@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
   avatarUrl: {
     type: String,
-    default: null,
+    default: "",
   },
   firstName: {
     type: String,

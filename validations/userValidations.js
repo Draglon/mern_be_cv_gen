@@ -59,10 +59,7 @@ export const registerValidation = [
 
 export const profileValidation = [
   body('avatarUrl')
-    .optional({ values: 'falsy' })
-    .isURL()
-    .withMessage('Avatar must be a valid URL!')
-    .bail(),
+    .optional({ values: 'falsy' }),
 
   body('firstName')
     .optional({ values: 'falsy' })
