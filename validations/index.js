@@ -1,3 +1,3 @@
-export { default as userValidations } from "./userValidations.js";
-export { default as settingsValidations } from "./settingsValidations.js";
-export { default as personalValidations } from "./personalValidations.js";
+export * as userValidations from "./userValidations.js";
+export * as profileValidations from "./profileValidations.js";
+export * as settingsValidations from "./settingsValidations.js";

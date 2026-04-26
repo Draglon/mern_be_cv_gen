@@ -27,7 +27,7 @@ export const create = async (req, res) => {
     personalInfo.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalInfo.firstName[req.body.locale] = req.body.firstName;
     personalInfo.lastName[req.body.locale] = req.body.lastName;
-    personalInfo.about[req.body.locale] = req.body.about;
+    personalInfo.aboutMe[req.body.locale] = req.body.aboutMe;
     personalInfo.email[req.body.locale] = req.body.email;
     personalInfo.address[req.body.locale] = req.body.address;
     personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;
@@ -67,7 +67,7 @@ export const update = async (req, res) => {
     personalInfo.sectionTitle[req.body.locale] = req.body?.sectionTitle;
     personalInfo.firstName[req.body.locale] = req.body.firstName;
     personalInfo.lastName[req.body.locale] = req.body.lastName;
-    personalInfo.about[req.body.locale] = req.body.about;
+    personalInfo.aboutMe[req.body.locale] = req.body.aboutMe;
     personalInfo.email[req.body.locale] = req.body.email;
     personalInfo.address[req.body.locale] = req.body.address;
     personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;

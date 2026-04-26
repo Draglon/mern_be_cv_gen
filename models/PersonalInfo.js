@@ -15,7 +15,7 @@ const PersonalInfoSchema = new mongoose.Schema({
   },
   firstName: localesSchema,
   lastName: localesSchema,
-  about: localesSchema,
+  aboutMe: localesSchema,
   email: localesSchema,
   address: localesSchema,
   phoneNumber: localesSchema,

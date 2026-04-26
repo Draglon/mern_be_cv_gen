@@ -4,13 +4,10 @@ import {
   MAX_EMAIL_LENGTH,
   MIN_PASSWORD_LENGTH,
   MAX_PASSWORD_LENGTH,
-  MIN_NAME_LENGTH,
-  MAX_NAME_LENGTH,
   MIN_NIKE_NAME_LENGTH,
   MAX_NIKE_NAME_LENGTH,
   REGEX_DIGITS,
   REGEX_LETTERS,
-  REGEX_MANE,
   REGEX_USER_MANE,
 } from "../lib/constants/index.js";
 
@@ -51,36 +48,6 @@ export const registerValidation = [
 
   body('userName')
     .trim()
-    .isLength({ min: MIN_NIKE_NAME_LENGTH, max: MAX_NIKE_NAME_LENGTH })
-    .withMessage(`Username must be ${MIN_NIKE_NAME_LENGTH}-${MAX_NIKE_NAME_LENGTH} characters!`)
-    .matches(REGEX_USER_MANE)
-    .withMessage('Username can contain only letters, numbers and underscores!'),
-];
-
-export const profileValidation = [
-  body('avatarUrl')
-    .optional({ values: 'falsy' }),
-
-  body('firstName')
-    .optional({ values: 'falsy' })
-    .trim()
-    .isLength({ min: MIN_NAME_LENGTH, max: MAX_NAME_LENGTH })
-    .withMessage(`First name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters!`)
-    .matches(REGEX_MANE)
-    .withMessage('First name must contain only letters!'),
-
-  body('lastName')
-    .optional({ values: 'falsy' })
-    .trim()
-    .isLength({ min: MIN_NAME_LENGTH, max: MAX_NAME_LENGTH })
-    .withMessage(`Last name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters!`)
-    .matches(REGEX_MANE)
-    .withMessage('Last name must contain only letters!'),
-
-  body('userName')
-    .trim()
-    .notEmpty()
-    .withMessage('Username is required!')
     .isLength({ min: MIN_NIKE_NAME_LENGTH, max: MAX_NIKE_NAME_LENGTH })
     .withMessage(`Username must be ${MIN_NIKE_NAME_LENGTH}-${MAX_NIKE_NAME_LENGTH} characters!`)
     .matches(REGEX_USER_MANE)
