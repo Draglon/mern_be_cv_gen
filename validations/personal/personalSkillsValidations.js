@@ -13,7 +13,7 @@ export const personalSkillsValidation = [
     .isArray({ min: 1 })
     .withMessage('Add at least one skill!'),
 
-  body('skills.*.name')
+  body('skills.*.skill')
     .trim()
     .notEmpty()
     .withMessage('Field is required!')

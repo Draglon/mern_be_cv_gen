@@ -4,12 +4,12 @@ import localesSchema from "../lib/constants/locales.js";
 
 const PersonalHobbiesSchema = new mongoose.Schema({
   sectionTitle: localesSchema,
+  hobbies: localesSchema,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     default: null,
   },
-  hobbies: localesSchema,
 },
 {
   timestamps: true,

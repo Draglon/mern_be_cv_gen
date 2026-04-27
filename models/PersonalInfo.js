@@ -4,11 +4,6 @@ import localesSchema from "../lib/constants/locales.js";
 
 const PersonalInfoSchema = new mongoose.Schema({
   sectionTitle: localesSchema,
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    default: null,
-  },
   userUrl: {
     type: String,
     default: "",
@@ -23,6 +18,11 @@ const PersonalInfoSchema = new mongoose.Schema({
   linkedIn: localesSchema,
   telegram: localesSchema,
   portfolio: localesSchema,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
 },
 {
   timestamps: true,

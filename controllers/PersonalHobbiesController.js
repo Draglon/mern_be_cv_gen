@@ -25,7 +25,7 @@ export const create = async (req, res) => {
     const personalHobbies = new PersonalHobbiesModel();
 
     personalHobbies.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
+    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body?.hobbies);
     personalHobbies.set('userId', req.body.userId);
 
     const personalHobbiesData = await personalHobbies.save();
@@ -47,6 +47,7 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
+    console.log("req.params.id: ", req.params.id);
     const personalHobbiesId = req.params.id;
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
 
@@ -55,7 +56,7 @@ export const update = async (req, res) => {
     }
 
     personalHobbies.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body.hobbies);
+    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body?.hobbies);
     personalHobbies.set('userId', req.body.userId);
 
     const personalHobbiesData = await personalHobbies.save();

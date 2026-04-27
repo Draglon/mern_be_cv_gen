@@ -4,12 +4,12 @@ import localesSchema from "../lib/constants/locales.js";
 
 const PersonalLanguagesSchema = new mongoose.Schema({
   sectionTitle: localesSchema,
+  languages: localesSchema,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     default: null,
   },
-  languages: localesSchema,
 },
 {
   timestamps: true,

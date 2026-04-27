@@ -31,15 +31,15 @@ export const personalCoursesValidation = [
 
   body('courses.*.startDate')
     .notEmpty()
-    .withMessage('Field is required!')
-    .bail()
-    .isISO8601({ strict: true })
-    .withMessage('The date must be in the format YYYY-MM-DD.'),
+    .withMessage('Field is required!'),
+    // .bail()
+    // .isISO8601({ strict: true })
+    // .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('courses.*.endDate')
     .notEmpty()
-    .withMessage('Field is required!')
-    .bail()
-    .isISO8601({ strict: true })
-    .withMessage('The date must be in the format YYYY-MM-DD.'),
+    .withMessage('Field is required!'),
+    // .bail()
+    // .isISO8601({ strict: true })
+    // .withMessage('The date must be in the format YYYY-MM-DD.'),
 ];

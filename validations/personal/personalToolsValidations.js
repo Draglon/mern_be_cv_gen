@@ -13,7 +13,7 @@ export const personalToolsValidation = [
     .isArray({ min: 1 })
     .withMessage('Add at least one skill!'),
 
-  body('tools.*.name')
+  body('tools.*.tool')
     .trim()
     .notEmpty()
     .withMessage('Field is required!')

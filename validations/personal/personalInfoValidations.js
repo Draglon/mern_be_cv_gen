@@ -78,10 +78,10 @@ export const personalInfoValidation = [
 
   body('birthday')
     .notEmpty()
-    .withMessage('Field is required!')
-    .bail()
-    .isISO8601({ strict: true })
-    .withMessage('The date must be in the format YYYY-MM-DD.'),
+    .withMessage('Field is required!'),
+    // .bail()
+    // .isISO8601({ strict: true })
+    // .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('telegram')
     .trim()

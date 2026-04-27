@@ -58,7 +58,7 @@ export const fetch = async (req, res) => {
         userUrl: personalInfo?.userUrl,
         firstName: personalInfo?.firstName,
         lastName: personalInfo?.lastName,
-        about: personalInfo?.about,
+        aboutMe: personalInfo?.aboutMe,
         email: personalInfo?.email,
         address: personalInfo?.address,
         phoneNumber: personalInfo?.phoneNumber,

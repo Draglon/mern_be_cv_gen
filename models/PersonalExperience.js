@@ -8,12 +8,12 @@ const PersonalExperiencesSchema = new mongoose.Schema({
     type: Number,
     default: "",
   },
+  experience: localesSchema,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     default: null,
   },
-  experience: localesSchema,
 },
 {
   timestamps: true,
