@@ -35,7 +35,7 @@ export const create = async (req, res) => {
     personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
     personalInfo.telegram[req.body.locale] = req.body.telegram;
     personalInfo.portfolio[req.body.locale] = req.body.portfolio;
-    personalInfo.set('userUrl', req.body.userUrl[0] ? req.body.userUrl[0] : "");
+    personalInfo.set('userUrl', req.body.userUrl);
     personalInfo.set('userId', req.body.userId);
 
     const personalInfoData = await personalInfo.save();
@@ -75,7 +75,7 @@ export const update = async (req, res) => {
     personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
     personalInfo.telegram[req.body.locale] = req.body.telegram;
     personalInfo.portfolio[req.body.locale] = req.body.portfolio;
-    personalInfo.set('userUrl', req.body.userUrl[0] ? req.body.userUrl[0] : "");
+    personalInfo.set('userUrl', req.body.userUrl);
     personalInfo.set('userId', req.body.userId);
 
     const personalInfoData = await personalInfo.save();
