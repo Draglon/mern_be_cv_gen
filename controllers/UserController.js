@@ -17,7 +17,7 @@ export const login = async (req, res) => {
       return getError(res, 404, { message: 'User not found!' });
     }
 
-    const isPasswordMatch = await checkPassword(password, user);
+    const isPasswordMatch = await checkPassword(password, user.passwordHash);
 
     if (!isPasswordMatch) {
       return res.status(401).json({ message: 'Invalid email or password!' })
@@ -64,43 +64,49 @@ export const register = async (req, res) => {
 
 export const fetchUser = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.userId);
+    const userData = await UserModel.findById(req.userId).select("-passwordHash");
 
-    if (!user) {
-      return getError(res, 404, { message: 'User not found!' });
+    if (!userData) {
+      return getError(res, 404, { message: "User not found!" });
     }
 
-    const { passwordHash, ...userData } = user._doc;
-
-    getResponse(res, 200, { ...userData });
+    return getResponse(res, 200, userData);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error!', error });
+    return getError(res, 500, {
+      message: "Server error!",
+      error,
+    });
   }
-}
+};
 
 export const updateUser = async (req, res) => {
   try {
     const { avatarUrl, firstName, lastName, userName } = req.body;
     const { userId } = req.params;
+
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      return getError(res, 404, { message: 'User not found!' });
+      return getError(res, 404, { message: "User not found!" });
     }
 
-    await UserModel.findByIdAndUpdate(userId, {
-      avatarUrl,
-      firstName,
-      lastName,
-      userName,
-    });
+    const updateData = {};
 
-    const userData = await user.save();
+    if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl;
+    if (firstName !== undefined) updateData.firstName = firstName;
+    if (lastName !== undefined) updateData.lastName = lastName;
+    if (userName !== undefined) updateData.userName = userName;
+
+    const userData = await UserModel.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
 
     res.json(userData);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error!', error });
+    getError(res, 500, { message: "Server error!", error });
   }
-}
+};

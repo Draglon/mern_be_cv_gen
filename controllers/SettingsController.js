@@ -1,6 +1,6 @@
+import { MIN_PASSWORD_LENGTH } from '../lib/constants/index.js';
 import getError from '../utils/getError.js';
 import getResponse from '../utils/getResponse.js';
-import checkEmailExists from '../utils/checkEmailExists.js';
 import checkPassword from '../utils/checkPassword.js';
 import getPasswordHash from '../utils/getPasswordHash.js';
 
@@ -66,58 +66,100 @@ export const deleteAccount = async (req, res) => {
 export const updateUserEmail = async (req, res) => {
   try {
     const { newEmail, password } = req.body;
-    const { userId } = req.params;
-    const user = await UserModel.findById(userId);
+    const { userId } = req;
+
+    const user = await UserModel.findById(userId).select("+passwordHash");
 
     if (!user) {
-      return getError(res, 404, { message: 'User not found!' });
+      return getError(res, 404, { message: "User not found!" });
     }
 
-    const isPasswordMatch = await checkPassword(password, user);
+    if (!newEmail) {
+      return getError(res, 400, { message: "Email is required!" });
+    }
+
+    if (!password) {
+      return getError(res, 400, { message: "Password is required!" });
+    }
+
+    if (user.email === newEmail) {
+      return getError(res, 400, {
+        message: "Email is already current",
+      });
+    }
+
+    const isPasswordMatch = await checkPassword(
+      password,
+      user.passwordHash
+    );
 
     if (!isPasswordMatch) {
-      return getError(res, 400, { message: 'Incorrect password!' });
+      return getError(res, 400, { message: "Incorrect password!" });
     }
 
-    const isEmailExists = await checkEmailExists(newEmail);
+    user.email = newEmail;
+    await user.save();
 
-    if (isEmailExists) {
-      return getError(res, 401, { message: 'Email already exists!' });
-    }
-
-    await UserModel.findByIdAndUpdate(userId, { email: newEmail });
-
-    getResponse(res, 200, { success: true, email: newEmail });
+    return getResponse(res, 200, { email: user.email });
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error! Failed to update email!', error });
+
+    if (error.code === 11000) {
+      return getError(res, 409, { message: "Email already exists!" });
+    }
+
+    return getError(res, 500, {
+      message: "Server error! Failed to update email!",
+      error,
+    });
   }
-}
+};
 
 export const updateUserPassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
-    const { userId } = req.params;
 
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(req.userId).select("+passwordHash");
 
     if (!user) {
-      return getError(res, 404, { message: 'User not found!' });
+      return getError(res, 404, { message: "User not found!" });
     }
 
-    const isCurrentPasswordMatch = await checkPassword(currentPassword, user);
+    const isCurrentPasswordMatch = await checkPassword(
+      currentPassword,
+      user.passwordHash
+    );
 
     if (!isCurrentPasswordMatch) {
-      return res.status(400).json({ message: 'Incorrect current password' });
+      return getError(res, 400, {
+        code: "INCORRECT_CURRENT_PASSWORD",
+        message: "Incorrect current password!",
+      });
     }
 
-    const passwordHash = await getPasswordHash(newPassword);
+    if (!newPassword || newPassword.length < MIN_PASSWORD_LENGTH) {
+      return getError(res, 400, {
+        code: "WEAK_PASSWORD",
+        message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters!`,
+      });
+    }
 
-    await UserModel.findByIdAndUpdate(userId, { passwordHash });
+    if (currentPassword === newPassword) {
+      return getError(res, 400, {
+        code: "NEW_PASSWORD_EQUALS_OLD",
+        message: "New password must be different!",
+      });
+    }
 
-    getResponse(res, 200, { success: true });
+    user.passwordHash = await getPasswordHash(newPassword);
+    await user.save();
+
+    return getResponse(res, 200, { success: true });
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Server error! Failed to update password!', error });
+    return getError(res, 500, {
+      message: "Server error! Failed to update password!",
+      error,
+    });
   }
-}
+};
