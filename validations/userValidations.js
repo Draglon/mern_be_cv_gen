@@ -6,8 +6,8 @@ import {
   MAX_PASSWORD_LENGTH,
   MIN_NIKE_NAME_LENGTH,
   MAX_NIKE_NAME_LENGTH,
-  REGEX_DIGITS,
-  REGEX_LETTERS,
+  REGEX_HAS_DIGITS,
+  REGEX_HAS_LETTERS,
   REGEX_USER_MANE,
 } from "../lib/constants/index.js";
 
@@ -41,9 +41,9 @@ export const registerValidation = [
     .trim()
     .isLength({ min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH })
     .withMessage(`Password must be ${MIN_PASSWORD_LENGTH}-${MAX_PASSWORD_LENGTH} characters!`)
-    .matches(REGEX_DIGITS)
+    .matches(REGEX_HAS_DIGITS)
     .withMessage('Password must contain at least one number!')
-    .matches(REGEX_LETTERS)
+    .matches(REGEX_HAS_LETTERS)
     .withMessage('Password must contain at least one uppercase letter!'),
 
   body('userName')

@@ -1,69 +1,133 @@
+import mongoose from "mongoose";
+
+import { ALLOWED_LOCALES } from '../lib/constants/index.js';
 import getError from '../utils/getError.js';
+import getResponse from '../utils/getResponse.js';
+
 import PersonalHobbiesModel from '../models/PersonalHobbies.js'
 import UserModel from '../models/User.js'
 
 export const fetch = async (req, res) => {
   try {
     const personalHobbiesId = req.params.id;
-    const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId)
 
-    if (!personalHobbies) {
-      return getError(res, 404, { message: 'Персональная информация по интересам не найденa.' });
+    if (!mongoose.Types.ObjectId.isValid(personalHobbiesId)) {
+      return getError(res, 400, { message: 'Invalid ID' });
     }
 
-    const personalHobbiesData = personalHobbies._doc;
+    const personalHobbies = await PersonalHobbiesModel
+      .findById(personalHobbiesId)
+      .lean();
 
-    res.json(personalHobbiesData)
+    if (!personalHobbies) {
+      return getError(res, 404, { message: 'Personal hobbies not found!' });
+    }
+
+    if (
+      personalHobbies.userId &&
+      personalHobbies.userId.toString() !== req.userId
+    ) {
+      return getError(res, 403, { message: 'Access denied' });
+    }
+
+    return res.json(personalHobbies);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при получении данных', error });
+    return getError(res, 500, { message: 'Server error! Failed fetch personal hobbies!', error });
   }
-}
+};
 
 export const create = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
+    const userId = req.userId;
+    const { sectionTitle, hobbies, locale } = req.body;
+
+    if (!ALLOWED_LOCALES.includes(locale)) {
+      return getError(res, 400, { message: 'Invalid locale' });
+    }
+
+    if (hobbies && !Array.isArray(hobbies)) {
+      return getError(res, 400, { message: "Hobbies must be an array" });
+    }
+
+    const existing = await PersonalHobbiesModel.findOne({ userId });
+    if (existing) {
+      return getError(res, 400, { message: "Hobbies already exist" });
+    }
+
     const personalHobbies = new PersonalHobbiesModel();
+    personalHobbies.set(`sectionTitle.${locale}`, sectionTitle);
+    personalHobbies.set(`hobbies.${locale}`, hobbies);
+    personalHobbies.userId = userId;
 
-    personalHobbies.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body?.hobbies);
-    personalHobbies.set('userId', req.body.userId);
+    const saved = await personalHobbies.save({ session });
 
-    const personalHobbiesData = await personalHobbies.save();
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { personalHobbiesId: saved._id } },
+      { session }
+    );
 
-    await UserModel.updateOne({
-      _id: req.body.userId,
-    }, {
-      $set: {
-        personalHobbiesId: personalHobbiesData._id,
-      }
-    });
+    await session.commitTransaction();
+    session.endSession();
 
-    res.json(personalHobbiesData);
+    return getResponse(res, 200, saved);
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при создании данных', error });
+    getError(res, 500, { message: "Server error! Failed create personal hobbies!", error });
   }
 }
 
 export const update = async (req, res) => {
   try {
-    console.log("req.params.id: ", req.params.id);
     const personalHobbiesId = req.params.id;
+    const { sectionTitle, hobbies, locale } = req.body;
+
+    if (!ALLOWED_LOCALES.includes(locale)) {
+      return getError(res, 400, { message: 'Invalid locale' });
+    }
+
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
 
     if (!personalHobbies) {
-      return getError(res, 404, { message: 'Персональная информация по интересам не найденa.' });
+      return getError(res, 404, { message: 'Personal hobbies not found!' });
     }
 
-    personalHobbies.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalHobbies.hobbies[req.body.locale] = JSON.stringify(req.body?.hobbies);
-    personalHobbies.set('userId', req.body.userId);
+    if (!personalHobbies.userId || personalHobbies.userId.toString() !== req.userId) {
+      return getError(res, 403, { message: 'Access denied' });
+    }
 
-    const personalHobbiesData = await personalHobbies.save();
+    const updateData = {};
 
-    res.json(personalHobbiesData);
+    if (sectionTitle !== undefined) {
+      updateData[`sectionTitle.${locale}`] = sectionTitle;
+    }
+
+    if (hobbies !== undefined) {
+      if (!Array.isArray(hobbies)) {
+        return getError(res, 400, { message: "Hobbies must be an array" });
+      }
+      updateData[`hobbies.${locale}`] = hobbies;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return getError(res, 400, { message: "No data to update" });
+    }
+
+    const personalHobbiesData = await PersonalHobbiesModel.findByIdAndUpdate(
+      personalHobbiesId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    return getResponse(res, 200, personalHobbiesData);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
+    getError(res, 500, { message: "Server error! Failed update personal hobbies!", error });
   }
 }

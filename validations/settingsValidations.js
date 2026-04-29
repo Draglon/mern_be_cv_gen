@@ -7,8 +7,8 @@ import {
   MIN_PASSWORD_LENGTH,
   MAX_PASSWORD_LENGTH,
   REGEX_USER_MANE,
-  REGEX_DIGITS,
-  REGEX_LETTERS,
+  REGEX_HAS_DIGITS,
+  REGEX_HAS_LETTERS,
 } from "../lib/constants/index.js";
 
 export const deleteAccountValidation = [
@@ -50,8 +50,8 @@ export const changePasswordValidation = [
     .withMessage('New password is required!')
     .isLength({ min: MIN_PASSWORD_LENGTH, max: MAX_PASSWORD_LENGTH })
     .withMessage(`Password must be ${MIN_PASSWORD_LENGTH}-${MAX_PASSWORD_LENGTH} characters!`)
-    .matches(REGEX_DIGITS)
+    .matches(REGEX_HAS_DIGITS)
     .withMessage('Password must contain at least one number!')
-    .matches(REGEX_LETTERS)
+    .matches(REGEX_HAS_LETTERS)
     .withMessage('Password must contain at least one uppercase letter!'),
 ];
