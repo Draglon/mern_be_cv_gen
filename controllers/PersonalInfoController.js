@@ -1,88 +1,128 @@
+import { ALLOWED_LOCALES } from '../lib/constants/index.js';
+import { PERSONAL_INFO_LOCALE_FIELDS } from '../lib/constants/personalInfo.js';
 import getError from '../utils/getError.js';
+import getResponse from '../utils/getResponse.js';
+
 import PersonalInfoModel from '../models/PersonalInfo.js';
 import UserModel from '../models/User.js';
 
 export const fetch = async (req, res) => {
   try {
     const personalInfoId = req.params.id;
-    const personalInfo = await PersonalInfoModel.findById(personalInfoId);
+
+    const personalInfo = await PersonalInfoModel.findOne({
+      _id: personalInfoId,
+      userId: req.userId,
+    }).lean();
 
     if (!personalInfo) {
-      return getError(res, 404, { message: 'Персональная информация не найденa.' });
+      return getError(res, 404, { message: "Personal info not found!" });
     }
 
-    const personalInfoData = personalInfo._doc;
-
-    res.json(personalInfoData);
+    return getResponse(res, 200, personalInfo);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при получении данных', error });
+    return getError(res, 500, {
+      message: "Server error! Failed fetch personal info!",
+      error,
+    });
   }
-}
+};
 
 export const create = async (req, res) => {
   try {
+    const userId = req.userId;
+    const { locale } = req.body;
+
+    if (!ALLOWED_LOCALES.includes(locale)) {
+      return getError(res, 400, { message: "Invalid locale" });
+    }
+
+    const existing = await PersonalInfoModel.findOne({ userId });
+    if (existing) {
+      return getError(res, 400, {
+        message: "Personal info already exists",
+      });
+    }
+
     const personalInfo = new PersonalInfoModel();
 
-    personalInfo.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalInfo.firstName[req.body.locale] = req.body.firstName;
-    personalInfo.lastName[req.body.locale] = req.body.lastName;
-    personalInfo.aboutMe[req.body.locale] = req.body.aboutMe;
-    personalInfo.email[req.body.locale] = req.body.email;
-    personalInfo.address[req.body.locale] = req.body.address;
-    personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;
-    personalInfo.birthday[req.body.locale] = req.body.birthday;
-    personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
-    personalInfo.telegram[req.body.locale] = req.body.telegram;
-    personalInfo.portfolio[req.body.locale] = req.body.portfolio;
-    personalInfo.set('userUrl', req.body.userUrl);
-    personalInfo.set('userId', req.body.userId);
+    PERSONAL_INFO_LOCALE_FIELDS.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        const value =
+          typeof req.body[field] === "string"
+            ? req.body[field].trim()
+            : req.body[field];
 
-    const personalInfoData = await personalInfo.save();
-
-    await UserModel.updateOne({
-      _id: req.body.userId,
-    }, {
-      $set: {
-        personalInfoId: personalInfoData._id,
+        personalInfo.set(`${field}.${locale}`, value);
       }
     });
+    personalInfo.set("userId", userId);
 
-    res.json(personalInfoData);
+    const saved = await personalInfo.save();
+
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { personalInfoId: saved._id } }
+    );
+
+    return getResponse(res, 200, saved);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при создании данных', error });
+    return getError(res, 500, {
+      message: "Server error! Failed create personal info!",
+      error,
+    });
   }
-}
+};
 
 export const update = async (req, res) => {
   try {
     const personalInfoId = req.params.id;
-    const personalInfo = await PersonalInfoModel.findById(personalInfoId);
+    const { locale } = req.body;
 
-    if (!personalInfo) {
-      return getError(res, 404, { message: 'Персональная информация не найденa.' });
+    if (!locale || !ALLOWED_LOCALES.includes(locale)) {
+      return getError(res, 400, { message: "Invalid locale" });
     }
 
-    personalInfo.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalInfo.firstName[req.body.locale] = req.body.firstName;
-    personalInfo.lastName[req.body.locale] = req.body.lastName;
-    personalInfo.aboutMe[req.body.locale] = req.body.aboutMe;
-    personalInfo.email[req.body.locale] = req.body.email;
-    personalInfo.address[req.body.locale] = req.body.address;
-    personalInfo.phoneNumber[req.body.locale] = req.body.phoneNumber;
-    personalInfo.birthday[req.body.locale] = req.body.birthday;
-    personalInfo.linkedIn[req.body.locale] = req.body.linkedIn;
-    personalInfo.telegram[req.body.locale] = req.body.telegram;
-    personalInfo.portfolio[req.body.locale] = req.body.portfolio;
-    personalInfo.set('userUrl', req.body.userUrl);
-    personalInfo.set('userId', req.body.userId);
+    const updateData = {};
 
-    const personalInfoData = await personalInfo.save();
+    PERSONAL_INFO_LOCALE_FIELDS.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        const value =
+          typeof req.body[field] === "string"
+            ? req.body[field].trim()
+            : req.body[field];
 
-    res.json(personalInfoData);
+        updateData[`${field}.${locale}`] = value;
+      }
+    });
+
+    if (Object.keys(updateData).length === 0) {
+      return getError(res, 400, { message: "No fields to update" });
+    }
+
+    const personalInfo = await PersonalInfoModel.findOneAndUpdate(
+      {
+        _id: personalInfoId,
+        userId: req.userId,
+      },
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!personalInfo) {
+      return getError(res, 404, {
+        message: "Personal info not found or access denied",
+      });
+    }
+
+    return getResponse(res, 200, personalInfo);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
+    return getError(res, 500, {
+      message: "Server error! Failed update personal info!",
+      error,
+    });
   }
-}
+};

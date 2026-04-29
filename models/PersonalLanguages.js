@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-import localesSchema from "../lib/constants/locales.js";
+import { localesStringSchema } from "../utils/schemas/locales.js";
 
 const PersonalLanguagesSchema = new mongoose.Schema({
-  sectionTitle: localesSchema,
-  languages: localesSchema,
+  sectionTitle: localesStringSchema,
+  languages: localesStringSchema,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

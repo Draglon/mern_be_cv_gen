@@ -15,9 +15,7 @@ export const fetch = async (req, res) => {
       return getError(res, 400, { message: 'Invalid ID' });
     }
 
-    const personalHobbies = await PersonalHobbiesModel
-      .findById(personalHobbiesId)
-      .lean();
+    const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId).lean();
 
     if (!personalHobbies) {
       return getError(res, 404, { message: 'Personal hobbies not found!' });
@@ -30,10 +28,13 @@ export const fetch = async (req, res) => {
       return getError(res, 403, { message: 'Access denied' });
     }
 
-    return res.json(personalHobbies);
+    return getResponse(res, 200, personalHobbies);
   } catch (error) {
     console.log(error);
-    return getError(res, 500, { message: 'Server error! Failed fetch personal hobbies!', error });
+    return getError(res, 500, {
+      message: 'Server error! Failed fetch personal hobbies!',
+      error,
+    });
   }
 };
 
@@ -61,7 +62,7 @@ export const create = async (req, res) => {
     const personalHobbies = new PersonalHobbiesModel();
     personalHobbies.set(`sectionTitle.${locale}`, sectionTitle);
     personalHobbies.set(`hobbies.${locale}`, hobbies);
-    personalHobbies.userId = userId;
+    personalHobbies.set("userId", userId);
 
     const saved = await personalHobbies.save({ session });
 
@@ -79,7 +80,10 @@ export const create = async (req, res) => {
     await session.abortTransaction();
     session.endSession();
     console.log(error);
-    getError(res, 500, { message: "Server error! Failed create personal hobbies!", error });
+    return getError(res, 500, {
+      message: "Server error! Failed create personal hobbies!",
+      error,
+    });
   }
 }
 
@@ -128,6 +132,9 @@ export const update = async (req, res) => {
     return getResponse(res, 200, personalHobbiesData);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: "Server error! Failed update personal hobbies!", error });
+    return getError(res, 500, {
+      message: "Server error! Failed update personal hobbies!",
+      error,
+    });
   }
 }

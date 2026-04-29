@@ -1,23 +1,20 @@
 import mongoose from "mongoose";
 
-import localesSchema from "../lib/constants/locales.js";
+import { localesStringSchema } from "../utils/schemas/locales.js";
 
 const PersonalInfoSchema = new mongoose.Schema({
-  sectionTitle: localesSchema,
-  userUrl: {
-    type: String,
-    default: "",
-  },
-  firstName: localesSchema,
-  lastName: localesSchema,
-  aboutMe: localesSchema,
-  email: localesSchema,
-  address: localesSchema,
-  phoneNumber: localesSchema,
-  birthday: localesSchema,
-  linkedIn: localesSchema,
-  telegram: localesSchema,
-  portfolio: localesSchema,
+  sectionTitle: localesStringSchema,
+  firstName: localesStringSchema,
+  lastName: localesStringSchema,
+  aboutMe: localesStringSchema,
+  email: localesStringSchema,
+  address: localesStringSchema,
+  phoneNumber: localesStringSchema,
+  birthday: localesStringSchema,
+  telegram:  localesStringSchema,
+  linkedIn:  localesStringSchema,
+  portfolio: localesStringSchema,
+  userUrl: localesStringSchema,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

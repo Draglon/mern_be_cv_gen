@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import { localesStringSchema } from "../utils/schemas/locales.js";
+
 const hobbySchema = new mongoose.Schema(
   {
     hobby: {
@@ -14,11 +16,7 @@ const hobbySchema = new mongoose.Schema(
 
 const PersonalHobbiesSchema = new mongoose.Schema(
   {
-    sectionTitle: {
-      en: { type: String, default: "" },
-      ua: { type: String, default: "" },
-      ru: { type: String, default: "" },
-    },
+    sectionTitle: localesStringSchema,
     hobbies: {
       en: { type: [hobbySchema], default: [] },
       ua: { type: [hobbySchema], default: [] },
