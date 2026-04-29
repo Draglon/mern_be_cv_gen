@@ -4,7 +4,7 @@ import { MIN_INPUT_LENGTH, MAX_INPUT_LENGTH, REGEX_STRING } from "../../lib/cons
 
 export const personalHobbiesValidation = [
   body('sectionTitle')
-    .optional()
+    .optional({ values: 'falsy' })
     .isString()
     .trim()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
