@@ -83,7 +83,7 @@ export const fetchUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { avatarUrl, firstName, lastName, userName } = req.body;
-    const { userId } = req.params;
+    const { userId } = req;
 
     const user = await UserModel.findById(userId);
 
@@ -98,13 +98,13 @@ export const updateUser = async (req, res) => {
     if (lastName !== undefined) updateData.lastName = lastName;
     if (userName !== undefined) updateData.userName = userName;
 
-    const userData = await UserModel.findByIdAndUpdate(
+    await UserModel.findByIdAndUpdate(
       userId,
       { $set: updateData },
       { new: true, runValidators: true }
     );
 
-    res.json(userData);
+    res.json(updateData);
   } catch (error) {
     console.log(error);
     getError(res, 500, { message: "Server error!", error });

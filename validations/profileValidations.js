@@ -23,7 +23,7 @@ export const profileValidation = [
     .isLength({ min: MIN_NAME_LENGTH, max: MAX_NAME_LENGTH })
     .withMessage(`First name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters!`)
     .matches(REGEX_MANE)
-    .withMessage('First name must contain only letters!'),
+    .withMessage('Use only letters, hyphens, or apostrophes in your first name!'),
 
   body('lastName')
     .optional({ values: 'falsy' })
@@ -31,7 +31,7 @@ export const profileValidation = [
     .isLength({ min: MIN_NAME_LENGTH, max: MAX_NAME_LENGTH })
     .withMessage(`Last name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters!`)
     .matches(REGEX_MANE)
-    .withMessage('Last name must contain only letters!'),
+    .withMessage('Use only letters, hyphens, or apostrophes in your last name!'),
 
   body('userName')
     .trim()

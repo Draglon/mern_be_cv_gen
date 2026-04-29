@@ -16,8 +16,8 @@ import PersonalToolsModel from "../models/PersonalTools.js";
 
 export const deleteAccount = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const userName = req.query.userName;
+    const userId = req.userId;
+    const userName = req.body.userName;
     const user = await UserModel.findById(userId);
 
     if (!user) {
