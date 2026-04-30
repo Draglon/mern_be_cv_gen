@@ -13,6 +13,10 @@ export const personalCoursesValidation = [
     .isArray({ min: 1 })
     .withMessage('Add at least one course!'),
 
+  body('courses.*')
+    .isObject()
+    .withMessage('Invalid course item'),
+
   body('courses.*.course')
     .trim()
     .notEmpty()
@@ -31,15 +35,24 @@ export const personalCoursesValidation = [
 
   body('courses.*.startDate')
     .notEmpty()
-    .withMessage('Field is required!'),
-    // .bail()
-    // .isISO8601({ strict: true })
-    // .withMessage('The date must be in the format YYYY-MM-DD.'),
+    .withMessage('Field is required!')
+    .bail()
+    .isISO8601({ strict: true })
+    .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('courses.*.endDate')
     .notEmpty()
-    .withMessage('Field is required!'),
-    // .bail()
-    // .isISO8601({ strict: true })
-    // .withMessage('The date must be in the format YYYY-MM-DD.'),
+    .withMessage('Field is required!')
+    .bail()
+    .isISO8601({ strict: true })
+    .withMessage('The date must be in the format YYYY-MM-DD.'),
+
+  body('courses').custom((courses) => {
+    for (const item of courses) {
+      if (new Date(item.endDate) < new Date(item.startDate)) {
+        throw new Error('End date must be greater than start date');
+      }
+    }
+    return true;
+  }),
 ];

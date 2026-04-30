@@ -16,6 +16,10 @@ export const personalHobbiesValidation = [
     .isArray({ min: 1 })
     .withMessage('Add at least one hobby!'),
 
+  body('hobbies.*')
+    .isObject()
+    .withMessage('Invalid hobby item'),
+
   body('hobbies.*.hobby')
     .isString()
     .trim()

@@ -13,6 +13,10 @@ export const personalSkillsValidation = [
     .isArray({ min: 1 })
     .withMessage('Add at least one skill!'),
 
+  body('skills.*')
+    .isObject()
+    .withMessage('Invalid skill item'),
+
   body('skills.*.skill')
     .trim()
     .notEmpty()

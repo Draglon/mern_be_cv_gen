@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-import { localesStringSchema } from "../utils/schemas/locales.js";
+import { localesStringSchema, localesArraySchema } from "../utils/schemas/locales.js";
+import { userIdSchema } from "../utils/schemas/user.js";
 
 const hobbySchema = new mongoose.Schema(
   {
@@ -16,17 +17,9 @@ const hobbySchema = new mongoose.Schema(
 
 const PersonalHobbiesSchema = new mongoose.Schema(
   {
-    sectionTitle: localesStringSchema,
-    hobbies: {
-      en: { type: [hobbySchema], default: [] },
-      ua: { type: [hobbySchema], default: [] },
-      ru: { type: [hobbySchema], default: [] },
-    },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
-    },
+    sectionTitle: localesStringSchema(),
+    hobbies: localesArraySchema(hobbySchema),
+    userId: userIdSchema,
   },
   { timestamps: true }
 );
