@@ -12,7 +12,7 @@ export const fetch = async (req, res) => {
     const personalHobbiesId = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(personalHobbiesId)) {
-      return getError(res, 400, { message: 'Invalid ID' });
+      return getError(res, 400, { message: 'Invalid ID!' });
     }
 
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId).lean();
@@ -25,7 +25,7 @@ export const fetch = async (req, res) => {
       personalHobbies.userId &&
       personalHobbies.userId.toString() !== req.userId
     ) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     return getResponse(res, 200, personalHobbies);
@@ -47,16 +47,16 @@ export const create = async (req, res) => {
     const { sectionTitle, hobbies, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     if (hobbies && !Array.isArray(hobbies)) {
-      return getError(res, 400, { message: "Hobbies must be an array" });
+      return getError(res, 400, { message: "Hobbies must be an array!" });
     }
 
     const existing = await PersonalHobbiesModel.findOne({ userId });
     if (existing) {
-      return getError(res, 400, { message: "Hobbies already exist" });
+      return getError(res, 400, { message: "Hobbies already exist!" });
     }
 
     const personalHobbies = new PersonalHobbiesModel();
@@ -64,18 +64,18 @@ export const create = async (req, res) => {
     personalHobbies.set(`hobbies.${locale}`, hobbies);
     personalHobbies.set("userId", userId);
 
-    const saved = await personalHobbies.save({ session });
+    const savedData = await personalHobbies.save({ session });
 
     await UserModel.updateOne(
       { _id: userId },
-      { $set: { personalHobbiesId: saved._id } },
+      { $set: { personalHobbiesId: savedData._id } },
       { session }
     );
 
     await session.commitTransaction();
     session.endSession();
 
-    return getResponse(res, 200, saved);
+    return getResponse(res, 200, savedData);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -93,7 +93,7 @@ export const update = async (req, res) => {
     const { sectionTitle, hobbies, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     const personalHobbies = await PersonalHobbiesModel.findById(personalHobbiesId);
@@ -103,7 +103,7 @@ export const update = async (req, res) => {
     }
 
     if (!personalHobbies.userId || personalHobbies.userId.toString() !== req.userId) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     const updateData = {};
@@ -114,22 +114,22 @@ export const update = async (req, res) => {
 
     if (hobbies !== undefined) {
       if (!Array.isArray(hobbies)) {
-        return getError(res, 400, { message: "Hobbies must be an array" });
+        return getError(res, 400, { message: "Hobbies must be an array!" });
       }
       updateData[`hobbies.${locale}`] = hobbies;
     }
 
     if (Object.keys(updateData).length === 0) {
-      return getError(res, 400, { message: "No data to update" });
+      return getError(res, 400, { message: "No data to update!" });
     }
 
-    const personalHobbiesData = await PersonalHobbiesModel.findByIdAndUpdate(
+    const savedData = await PersonalHobbiesModel.findByIdAndUpdate(
       personalHobbiesId,
       { $set: updateData },
       { new: true, runValidators: true }
     );
 
-    return getResponse(res, 200, personalHobbiesData);
+    return getResponse(res, 200, savedData);
   } catch (error) {
     console.log(error);
     return getError(res, 500, {

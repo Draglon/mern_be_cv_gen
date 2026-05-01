@@ -13,7 +13,7 @@ export const fetch = async (req, res) => {
     const personalLanguagesId = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(personalLanguagesId)) {
-      return getError(res, 400, { message: 'Invalid ID' });
+      return getError(res, 400, { message: 'Invalid ID!' });
     }
 
     const personalLanguages = await PersonalLanguagesModel.findById(personalLanguagesId);
@@ -26,10 +26,10 @@ export const fetch = async (req, res) => {
       personalLanguages.userId &&
       personalLanguages.userId.toString() !== userId
     ) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
-    return getResponse(res, 200, personalHobbies);
+    return getResponse(res, 200, personalLanguages);
   } catch (error) {
     console.log(error);
     getError(res, 500, { message: 'Server error! Failed fetch personal languages!', error });
@@ -45,16 +45,16 @@ export const create = async (req, res) => {
     const { sectionTitle, languages, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     if (languages && !Array.isArray(languages)) {
-      return getError(res, 400, { message: "Languages must be an array" });
+      return getError(res, 400, { message: "Languages must be an array!" });
     }
 
     const existing = await PersonalLanguagesModel.findOne({ userId });
     if (existing) {
-      return getError(res, 400, { message: "Languages already exist" });
+      return getError(res, 400, { message: "Languages already exist!" });
     }
 
     const personalLanguages = new PersonalLanguagesModel();
@@ -62,18 +62,18 @@ export const create = async (req, res) => {
     personalLanguages.set(`languages.${locale}`, languages);
     personalLanguages.set("userId", userId);
 
-    const saved = await personalLanguages.save({ session });
+    const savedData = await personalLanguages.save({ session });
 
     await UserModel.updateOne(
       { _id: userId },
-      { $set: { personalLanguagesId: saved._id } },
+      { $set: { personalLanguagesId: savedData._id } },
       { session }
     );
 
     await session.commitTransaction();
     session.endSession();
 
-    return getResponse(res, 200, saved);
+    return getResponse(res, 200, savedData);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -92,7 +92,7 @@ export const update = async (req, res) => {
     const { sectionTitle, languages, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     const personalLanguages = await PersonalLanguagesModel.findById(personalLanguagesId);
@@ -102,7 +102,7 @@ export const update = async (req, res) => {
     }
 
     if (!personalLanguages.userId || personalLanguages.userId.toString() !== userId) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     const updateData = {};
@@ -113,22 +113,22 @@ export const update = async (req, res) => {
 
     if (languages !== undefined) {
       if (!Array.isArray(languages)) {
-        return getError(res, 400, { message: "Languages must be an array" });
+        return getError(res, 400, { message: "Languages must be an array!" });
       }
       updateData[`languages.${locale}`] = languages;
     }
 
     if (Object.keys(updateData).length === 0) {
-      return getError(res, 400, { message: "No data to update" });
+      return getError(res, 400, { message: "No data to update!" });
     }
 
-    const personalLanguagesData = await PersonalLanguagesModel.findByIdAndUpdate(
+    const savedData = await PersonalLanguagesModel.findByIdAndUpdate(
       personalLanguagesId,
       { $set: updateData },
       { new: true, runValidators: true }
     );
 
-    return getResponse(res, 200, personalLanguagesData);
+    return getResponse(res, 200, savedData);
   } catch (error) {
     console.log(error);
     return getError(res, 500, {

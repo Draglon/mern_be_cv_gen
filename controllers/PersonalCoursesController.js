@@ -13,7 +13,7 @@ export const fetch = async (req, res) => {
     const personalCoursesId = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(personalCoursesId)) {
-      return getError(res, 400, { message: 'Invalid ID' });
+      return getError(res, 400, { message: 'Invalid ID!' });
     }
 
     const personalCourses = await PersonalCoursesModel.findById(personalCoursesId);
@@ -26,7 +26,7 @@ export const fetch = async (req, res) => {
       personalCourses.userId &&
       personalCourses.userId.toString() !== userId
     ) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     return getResponse(res, 200, personalCourses);
@@ -45,16 +45,16 @@ export const create = async (req, res) => {
     const { sectionTitle, courses, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     if (courses && !Array.isArray(courses)) {
-      return getError(res, 400, { message: "Courses must be an array" });
+      return getError(res, 400, { message: "Courses must be an array!" });
     }
 
     const existing = await PersonalCoursesModel.findOne({ userId });
     if (existing) {
-      return getError(res, 400, { message: "Courses already exist" });
+      return getError(res, 400, { message: "Courses already exist!" });
     }
 
     const personalCourses = new PersonalCoursesModel();
@@ -92,7 +92,7 @@ export const update = async (req, res) => {
     const { sectionTitle, courses, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     const personalCourses = await PersonalCoursesModel.findById(personalCoursesId);
@@ -102,7 +102,7 @@ export const update = async (req, res) => {
     }
 
     if (!personalCourses.userId || personalCourses.userId.toString() !== userId) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     const updateData = {};
@@ -113,13 +113,13 @@ export const update = async (req, res) => {
 
     if (courses !== undefined) {
       if (!Array.isArray(courses)) {
-        return getError(res, 400, { message: "Courses must be an array" });
+        return getError(res, 400, { message: "Courses must be an array!" });
       }
       updateData[`courses.${locale}`] = courses;
     }
 
     if (Object.keys(updateData).length === 0) {
-      return getError(res, 400, { message: "No data to update" });
+      return getError(res, 400, { message: "No data to update!" });
     }
 
     const savedData = await PersonalCoursesModel.findByIdAndUpdate(

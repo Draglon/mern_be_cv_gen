@@ -13,7 +13,7 @@ export const fetch = async (req, res) => {
     const personalToolsId = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(personalToolsId)) {
-      return getError(res, 400, { message: 'Invalid ID' });
+      return getError(res, 400, { message: 'Invalid ID!' });
     }
 
     const personalTools = await PersonalToolsModel.findById(personalToolsId);
@@ -26,7 +26,7 @@ export const fetch = async (req, res) => {
       personalTools.userId &&
       personalTools.userId.toString() !== userId
     ) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     return getResponse(res, 200, personalTools);
@@ -45,16 +45,16 @@ export const create = async (req, res) => {
     const { sectionTitle, tools, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     if (tools && !Array.isArray(tools)) {
-      return getError(res, 400, { message: "Tools must be an array" });
+      return getError(res, 400, { message: "Tools must be an array!" });
     }
 
     const existing = await PersonalToolsModel.findOne({ userId });
     if (existing) {
-      return getError(res, 400, { message: "Tools already exist" });
+      return getError(res, 400, { message: "Tools already exist!" });
     }
 
     const personalTools = new PersonalToolsModel();
@@ -92,7 +92,7 @@ export const update = async (req, res) => {
     const { sectionTitle, tools, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     const personalTools = await PersonalToolsModel.findById(personalToolsId);
@@ -102,7 +102,7 @@ export const update = async (req, res) => {
     }
 
     if (!personalTools.userId || personalTools.userId.toString() !== userId) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     const updateData = {};
@@ -113,13 +113,13 @@ export const update = async (req, res) => {
 
     if (tools !== undefined) {
       if (!Array.isArray(tools)) {
-        return getError(res, 400, { message: "Tools must be an array" });
+        return getError(res, 400, { message: "Tools must be an array!" });
       }
       updateData[`tools.${locale}`] = tools;
     }
 
     if (Object.keys(updateData).length === 0) {
-      return getError(res, 400, { message: "No data to update" });
+      return getError(res, 400, { message: "No data to update!" });
     }
 
     const savedData = await PersonalToolsModel.findByIdAndUpdate(

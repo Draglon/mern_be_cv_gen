@@ -35,13 +35,13 @@ export const create = async (req, res) => {
     const { locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: "Invalid locale" });
+      return getError(res, 400, { message: "Invalid locale!" });
     }
 
     const existing = await PersonalInfoModel.findOne({ userId });
     if (existing) {
       return getError(res, 400, {
-        message: "Personal info already exists",
+        message: "Personal info already exists!",
       });
     }
 
@@ -59,14 +59,14 @@ export const create = async (req, res) => {
     });
     personalInfo.set("userId", userId);
 
-    const saved = await personalInfo.save();
+    const savedData = await personalInfo.save();
 
     await UserModel.updateOne(
       { _id: userId },
-      { $set: { personalInfoId: saved._id } }
+      { $set: { personalInfoId: savedData._id } }
     );
 
-    return getResponse(res, 200, saved);
+    return getResponse(res, 200, savedData);
   } catch (error) {
     console.log(error);
     return getError(res, 500, {
@@ -82,7 +82,7 @@ export const update = async (req, res) => {
     const { locale } = req.body;
 
     if (!locale || !ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: "Invalid locale" });
+      return getError(res, 400, { message: "Invalid locale!" });
     }
 
     const updateData = {};
@@ -99,10 +99,10 @@ export const update = async (req, res) => {
     });
 
     if (Object.keys(updateData).length === 0) {
-      return getError(res, 400, { message: "No fields to update" });
+      return getError(res, 400, { message: "No fields to update!" });
     }
 
-    const personalInfo = await PersonalInfoModel.findOneAndUpdate(
+    const savedData = await PersonalInfoModel.findOneAndUpdate(
       {
         _id: personalInfoId,
         userId: req.userId,
@@ -111,13 +111,13 @@ export const update = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    if (!personalInfo) {
+    if (!savedData) {
       return getError(res, 404, {
-        message: "Personal info not found or access denied",
+        message: "Personal info not found or access denied!",
       });
     }
 
-    return getResponse(res, 200, personalInfo);
+    return getResponse(res, 200, savedData);
   } catch (error) {
     console.log(error);
     return getError(res, 500, {

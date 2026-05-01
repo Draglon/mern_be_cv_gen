@@ -13,7 +13,7 @@ export const fetch = async (req, res) => {
     const personalSkillsId = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(personalSkillsId)) {
-      return getError(res, 400, { message: 'Invalid ID' });
+      return getError(res, 400, { message: 'Invalid ID!' });
     }
 
     const personalSkills = await PersonalSkillsModel.findById(personalSkillsId);
@@ -26,7 +26,7 @@ export const fetch = async (req, res) => {
       personalSkills.userId &&
       personalSkills.userId.toString() !== userId
     ) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     return getResponse(res, 200, personalSkills);
@@ -45,16 +45,16 @@ export const create = async (req, res) => {
     const { sectionTitle, skills, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     if (skills && !Array.isArray(skills)) {
-      return getError(res, 400, { message: "Skills must be an array" });
+      return getError(res, 400, { message: "Skills must be an array!" });
     }
 
     const existing = await PersonalSkillsModel.findOne({ userId });
     if (existing) {
-      return getError(res, 400, { message: "Skills already exist" });
+      return getError(res, 400, { message: "Skills already exist!" });
     }
 
     const personalSkills = new PersonalSkillsModel();
@@ -92,7 +92,7 @@ export const update = async (req, res) => {
     const { sectionTitle, skills, locale } = req.body;
 
     if (!ALLOWED_LOCALES.includes(locale)) {
-      return getError(res, 400, { message: 'Invalid locale' });
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
     const personalSkills = await PersonalSkillsModel.findById(personalSkillsId);
@@ -102,7 +102,7 @@ export const update = async (req, res) => {
     }
 
     if (!personalSkills.userId || personalSkills.userId.toString() !== userId) {
-      return getError(res, 403, { message: 'Access denied' });
+      return getError(res, 403, { message: 'Access denied!' });
     }
 
     const updateData = {};
@@ -113,13 +113,13 @@ export const update = async (req, res) => {
 
     if (skills !== undefined) {
       if (!Array.isArray(skills)) {
-        return getError(res, 400, { message: "Skills must be an array" });
+        return getError(res, 400, { message: "Skills must be an array!" });
       }
       updateData[`skills.${locale}`] = skills;
     }
 
     if (Object.keys(updateData).length === 0) {
-      return getError(res, 400, { message: "No data to update" });
+      return getError(res, 400, { message: "No data to update!" });
     }
 
     const savedData = await PersonalSkillsModel.findByIdAndUpdate(
