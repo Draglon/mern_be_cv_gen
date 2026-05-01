@@ -4,7 +4,7 @@ import UserModel from "../models/User.js";
 import PersonalInfoModel from "../models/PersonalInfo.js";
 import PersonalHobbiesModel from "../models/PersonalHobbies.js";
 import PersonalLanguagesModel from "../models/PersonalLanguages.js";
-import PersonalExperienceModel from "../models/PersonalExperience.js";
+import PersonalExperiencesModel from "../models/PersonalExperiences.js";
 import PersonalEducationModel from "../models/PersonalEducation.js";
 import PersonalCoursesModel from "../models/PersonalCourses.js";
 import PersonalSkillsModel from "../models/PersonalSkills.js";
@@ -36,8 +36,8 @@ export const fetch = async (req, res) => {
     if (user.personalLanguagesId) {
       personalLanguages = await PersonalLanguagesModel.findById(user.personalLanguagesId);
     }
-    if (user.personalExperienceId) {
-      personalExperience = await PersonalExperienceModel.findById(user.personalExperienceId);
+    if (user.personalExperiencesId) {
+      personalExperience = await PersonalExperiencesModel.findById(user.personalExperiencesId);
     }
     if (user.personalEducationId) {
       personalEducation = await PersonalEducationModel.findById(user.personalEducationId);

@@ -1,71 +1,144 @@
+import mongoose from "mongoose";
+
+import { ALLOWED_LOCALES } from '../lib/constants/index.js';
 import getError from '../utils/getError.js';
-import PersonalExperienceModel from '../models/PersonalExperience.js'
-import UserModel from '../models/User.js'
+import getResponse from '../utils/getResponse.js';
+
+import PersonalExperiencesModel from '../models/PersonalExperiences.js';
+import UserModel from '../models/User.js';
 
 export const fetch = async (req, res) => {
-  const personalExperienceId = req.params.id;
-
   try {
-    const personalExperience = await PersonalExperienceModel.findById(personalExperienceId)
+    const userId = req.userId;
+    const personalExperiencesId = req.params.id;
 
-    if (!personalExperience) {
-      return getError(res, 404, { message: 'Персональный опыт работы не найден.' });
+    if (!mongoose.Types.ObjectId.isValid(personalExperiencesId)) {
+      return getError(res, 400, { message: 'Invalid ID!' });
     }
 
-    const personalExperienceData = personalExperience._doc;
+    const personalExperiences = await PersonalExperiencesModel.findById(personalExperiencesId);
 
-    res.json({ ...personalExperienceData })
+    if (!personalExperiences) {
+      return getError(res, 404, { message: 'Personal experiences not found!' });
+    }
+
+    if (
+      personalExperiences.userId &&
+      personalExperiences.userId.toString() !== userId
+    ) {
+      return getError(res, 403, { message: 'Access denied!' });
+    }
+
+    return getResponse(res, 200, personalExperiences);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при получении данных', error });
+    getError(res, 500, { message: 'Server error! Failed fetch personal experiences!', error });
   }
 }
 
 export const create = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
-    const personalExperience = new PersonalExperienceModel();
+    const userId = req.userId;
+    const { sectionTitle, recentPositionsCount, experiences, locale } = req.body;
 
-    personalExperience.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalExperience.lastPlacesOfWorks = req.body.lastPlacesOfWorks;
-    personalExperience.experience[req.body.locale] = JSON.stringify(req.body.experience);
-    personalExperience.set('userId', req.body.userId);
+    if (!ALLOWED_LOCALES.includes(locale)) {
+      return getError(res, 400, { message: 'Invalid locale!' });
+    }
 
-    const personalExperienceData = await personalExperience.save();
+    if (experiences && !Array.isArray(experiences)) {
+      return getError(res, 400, { message: "Experiences must be an array!" });
+    }
 
-    await UserModel.updateOne({
-      _id: req.body.userId,
-    }, {
-      $set: {
-        personalExperienceId: personalExperienceData._id,
-      }
-    });
+    const existing = await PersonalExperiencesModel.findOne({ userId });
+    if (existing) {
+      return getError(res, 400, { message: "Experiences already exist!" });
+    }
 
-    res.json(personalExperienceData);
+    const personalExperiences = new PersonalExperiencesModel();
+    personalExperiences.set(`sectionTitle.${locale}`, sectionTitle);
+    personalExperiences.set(`recentPositionsCount.${locale}`, recentPositionsCount);
+    personalExperiences.set(`experiences.${locale}`, experiences);
+    personalExperiences.set("userId", userId);
+
+    const savedData = await personalExperiences.save({ session });
+
+    await UserModel.updateOne(
+      { _id: userId },
+      { $set: { personalExperiencesId: savedData._id } },
+      { session }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return getResponse(res, 200, savedData);
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при создании данных', error });
+    return getError(res, 500, {
+      message: "Server error! Failed create personal experiences!",
+      error,
+    });
   }
 }
 
 export const update = async (req, res) => {
   try {
-    const personalExperienceId = req.params.id;
-    const personalExperience = await PersonalExperienceModel.findById(personalExperienceId);
+    const userId = req.userId;
+    const personalExperiencesId = req.params.id;
+    const { sectionTitle, recentPositionsCount, experiences, locale } = req.body;
 
-    if (!personalExperience) {
-      return getError(res, 404, { message: 'Персональный опыт работы не найден.' });
+    if (!ALLOWED_LOCALES.includes(locale)) {
+      return getError(res, 400, { message: 'Invalid locale!' });
     }
 
-    personalExperience.sectionTitle[req.body.locale] = req.body?.sectionTitle;
-    personalExperience.lastPlacesOfWorks = req.body.lastPlacesOfWorks;
-    personalExperience.experience[req.body.locale] = JSON.stringify(req.body.experience);
-    personalExperience.set('userId', req.body.userId);
+    const personalExperiences = await PersonalExperiencesModel.findById(personalExperiencesId);
 
-    const personalExperienceData = await personalExperience.save();
+    if (!personalExperiences) {
+      return getError(res, 404, { message: 'Personal experiences not found!' });
+    }
 
-    res.json(personalExperienceData);
+    if (!personalExperiences.userId || personalExperiences.userId.toString() !== userId) {
+      return getError(res, 403, { message: 'Access denied!' });
+    }
+
+    const updateData = {};
+
+    if (sectionTitle !== undefined) {
+      updateData[`sectionTitle.${locale}`] = sectionTitle;
+    }
+
+    if (recentPositionsCount !== undefined) {
+      updateData[`recentPositionsCount.${locale}`] = recentPositionsCount;
+    }
+
+    if (experiences !== undefined) {
+      if (!Array.isArray(experiences)) {
+        return getError(res, 400, { message: "Experiences must be an array!" });
+      }
+      updateData[`experiences.${locale}`] = experiences;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return getError(res, 400, { message: "No data to update!" });
+    }
+
+    const savedData = await PersonalExperiencesModel.findByIdAndUpdate(
+      personalExperiencesId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    return getResponse(res, 200, savedData);
   } catch (error) {
     console.log(error);
-    getError(res, 500, { message: 'Ошибка при обнавлении данных', error });
+    return getError(res, 500, {
+      message: "Server error! Failed update personal experiences!",
+      error,
+    });
   }
 }

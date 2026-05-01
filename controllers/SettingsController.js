@@ -8,7 +8,7 @@ import UserModel from "../models/User.js";
 import PersonalInfoModel from "../models/PersonalInfo.js";
 import PersonalHobbiesModel from "../models/PersonalHobbies.js";
 import PersonalLanguagesModel from "../models/PersonalLanguages.js";
-import PersonalExperienceModel from "../models/PersonalExperience.js";
+import PersonalExperiencesModel from "../models/PersonalExperiences.js";
 import PersonalEducationModel from "../models/PersonalEducation.js";
 import PersonalCoursesModel from "../models/PersonalCourses.js";
 import PersonalSkillsModel from "../models/PersonalSkills.js";
@@ -39,8 +39,8 @@ export const deleteAccount = async (req, res) => {
     if (user.personalLanguagesId) {
       await PersonalLanguagesModel.findByIdAndDelete(user.personalLanguagesId);
     }
-    if (user.personalExperienceId) {
-      await PersonalExperienceModel.findByIdAndDelete(user.personalExperienceId);
+    if (user.personalExperiencesId) {
+      await PersonalExperiencesModel.findByIdAndDelete(user.personalExperiencesId);
     }
     if (user.personalEducationId) {
       await PersonalEducationModel.findByIdAndDelete(user.personalEducationId);

@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema({
     ref: "PersonalLanguages",
     default: null,
   },
-  personalExperienceId: {
+  personalExperiencesId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "PersonalExperience",
     default: null,
