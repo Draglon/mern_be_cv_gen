@@ -77,7 +77,7 @@ export const fetch = async (req, res) => {
       },
       personalExperience: {
         sectionTitle: personalExperience?.sectionTitle,
-        experience: personalExperience?.experience,
+        experiences: personalExperience?.experiences,
       },
       personalEducation: {
         sectionTitle: personalEducation?.sectionTitle,
