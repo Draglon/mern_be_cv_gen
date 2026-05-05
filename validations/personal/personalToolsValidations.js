@@ -1,13 +1,24 @@
 import { body } from 'express-validator'
 
-import { MIN_INPUT_LENGTH, MAX_INPUT_LENGTH, MIN_NAME_LENGTH, MAX_NAME_LENGTH } from "../../lib/constants/index.js";
+import {
+  MIN_INPUT_LENGTH,
+  MAX_INPUT_LENGTH,
+  MIN_NAME_LENGTH,
+  MAX_NAME_LENGTH,
+  MIN_LEVEL_NUMBER,
+  MAX_LEVEL_NUMBER,
+  REGEX_STRING,
+} from "../../lib/constants/index.js";
 
 export const personalToolsValidation = [
   body('sectionTitle')
-    .trim()
     .optional({ values: 'falsy' })
+    .isString()
+    .trim()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
-    .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
+    .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`)
+    .matches(REGEX_STRING)
+    .withMessage('Please use only letters and spaces!'),
 
   body('tools')
     .isArray({ min: 1 })
@@ -28,8 +39,8 @@ export const personalToolsValidation = [
 
   body('tools.*.level')
     .toInt()
-    .isInt({ min: 0, max: 100 })
-    .withMessage('Must be between 0 and 100'),
+    .isInt({ min: MIN_LEVEL_NUMBER, max: MAX_LEVEL_NUMBER })
+    .withMessage(`Must be between ${MIN_LEVEL_NUMBER} and ${MAX_LEVEL_NUMBER}`),
 
   body('tools.*.visible')
     .toBoolean()

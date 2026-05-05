@@ -1,14 +1,17 @@
 import { body } from 'express-validator'
 
 import { EMPLOYMENT_TYPES, WORK_FORMATS } from "../../lib/constants/experiences.js";
-import { MIN_INPUT_LENGTH, MAX_INPUT_LENGTH, MAX_TEXTAREA_CONTENT_NORMAL_LENGTH } from "../../lib/constants/index.js";
+import { MIN_INPUT_LENGTH, MAX_INPUT_LENGTH, MAX_TEXTAREA_CONTENT_NORMAL_LENGTH, REGEX_STRING } from "../../lib/constants/index.js";
 
 export const personalExperienceValidation = [
   body('sectionTitle')
-    .trim()
     .optional({ values: 'falsy' })
+    .isString()
+    .trim()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
-    .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
+    .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`)
+    .matches(REGEX_STRING)
+    .withMessage('Please use only letters and spaces!'),
 
   body('recentPositionsCount')
     .optional({ values: 'falsy' })

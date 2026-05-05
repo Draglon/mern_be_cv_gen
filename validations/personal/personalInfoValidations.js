@@ -10,14 +10,18 @@ import {
   REGEX_IMAGE_BASE64_FORMATS,
   REGEX_PHONE_NUMBER,
   REGEX_TELEGRAM,
+  REGEX_STRING,
 } from "../../lib/constants/index.js";
 
 export const personalInfoValidation = [
   body('sectionTitle')
-    .trim()
     .optional({ values: 'falsy' })
+    .isString()
+    .trim()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
-    .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
+    .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`)
+    .matches(REGEX_STRING)
+    .withMessage('Please use only letters and spaces!'),
 
   body('userUrl')
     .trim()
@@ -66,7 +70,7 @@ export const personalInfoValidation = [
     .withMessage('Field is required!')
     .bail()
     .isLength({ max: MAX_INPUT_LENGTH })
-    .withMessage(`The length must not exceed ${MAX_EMAIL_LENGTH} characters!`),
+    .withMessage(`The length must not exceed ${MAX_INPUT_LENGTH} characters!`),
 
   body('phoneNumber')
     .trim()
