@@ -42,9 +42,9 @@ export const create = async (req, res) => {
 
   try {
     const userId = req.userId;
-    const { sectionTitle, skills, locale } = req.body;
+    const { sectionTitle, skills, resumeLocale } = req.body;
 
-    if (!ALLOWED_LOCALES.includes(locale)) {
+    if (!ALLOWED_LOCALES.includes(resumeLocale)) {
       return getError(res, 400, { message: 'Invalid locale!' });
     }
 
@@ -58,8 +58,8 @@ export const create = async (req, res) => {
     }
 
     const personalSkills = new PersonalSkillsModel();
-    personalSkills.set(`sectionTitle.${locale}`, sectionTitle);
-    personalSkills.set(`skills.${locale}`, skills);
+    personalSkills.set(`sectionTitle.${resumeLocale}`, sectionTitle);
+    personalSkills.set(`skills.${resumeLocale}`, skills);
     personalSkills.set("userId", userId);
 
     const savedData = await personalSkills.save({ session });
@@ -89,9 +89,9 @@ export const update = async (req, res) => {
   try {
     const userId = req.userId;
     const personalSkillsId = req.params.id;
-    const { sectionTitle, skills, locale } = req.body;
+    const { sectionTitle, skills, resumeLocale } = req.body;
 
-    if (!ALLOWED_LOCALES.includes(locale)) {
+    if (!ALLOWED_LOCALES.includes(resumeLocale)) {
       return getError(res, 400, { message: 'Invalid locale!' });
     }
 
@@ -108,14 +108,14 @@ export const update = async (req, res) => {
     const updateData = {};
 
     if (sectionTitle !== undefined) {
-      updateData[`sectionTitle.${locale}`] = sectionTitle;
+      updateData[`sectionTitle.${resumeLocale}`] = sectionTitle;
     }
 
     if (skills !== undefined) {
       if (!Array.isArray(skills)) {
         return getError(res, 400, { message: "Skills must be an array!" });
       }
-      updateData[`skills.${locale}`] = skills;
+      updateData[`skills.${resumeLocale}`] = skills;
     }
 
     if (Object.keys(updateData).length === 0) {

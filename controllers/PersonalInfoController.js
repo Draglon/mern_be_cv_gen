@@ -32,9 +32,9 @@ export const fetch = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const userId = req.userId;
-    const { locale } = req.body;
+    const { resumeLocale } = req.body;
 
-    if (!ALLOWED_LOCALES.includes(locale)) {
+    if (!ALLOWED_LOCALES.includes(resumeLocale)) {
       return getError(res, 400, { message: "Invalid locale!" });
     }
 
@@ -54,7 +54,7 @@ export const create = async (req, res) => {
             ? req.body[field].trim()
             : req.body[field];
 
-        personalInfo.set(`${field}.${locale}`, value);
+        personalInfo.set(`${field}.${resumeLocale}`, value);
       }
     });
     personalInfo.set("userId", userId);
@@ -79,9 +79,9 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
   try {
     const personalInfoId = req.params.id;
-    const { locale } = req.body;
+    const { resumeLocale } = req.body;
 
-    if (!locale || !ALLOWED_LOCALES.includes(locale)) {
+    if (!resumeLocale || !ALLOWED_LOCALES.includes(resumeLocale)) {
       return getError(res, 400, { message: "Invalid locale!" });
     }
 
@@ -94,7 +94,7 @@ export const update = async (req, res) => {
             ? req.body[field].trim()
             : req.body[field];
 
-        updateData[`${field}.${locale}`] = value;
+        updateData[`${field}.${resumeLocale}`] = value;
       }
     });
 

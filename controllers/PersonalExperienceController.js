@@ -42,9 +42,9 @@ export const create = async (req, res) => {
 
   try {
     const userId = req.userId;
-    const { sectionTitle, recentPositionsCount, experiences, locale } = req.body;
+    const { sectionTitle, recentPositionsCount, experiences, resumeLocale } = req.body;
 
-    if (!ALLOWED_LOCALES.includes(locale)) {
+    if (!ALLOWED_LOCALES.includes(resumeLocale)) {
       return getError(res, 400, { message: 'Invalid locale!' });
     }
 
@@ -58,9 +58,9 @@ export const create = async (req, res) => {
     }
 
     const personalExperiences = new PersonalExperiencesModel();
-    personalExperiences.set(`sectionTitle.${locale}`, sectionTitle);
-    personalExperiences.set(`recentPositionsCount.${locale}`, recentPositionsCount);
-    personalExperiences.set(`experiences.${locale}`, experiences);
+    personalExperiences.set(`sectionTitle.${resumeLocale}`, sectionTitle);
+    personalExperiences.set(`recentPositionsCount.${resumeLocale}`, recentPositionsCount);
+    personalExperiences.set(`experiences.${resumeLocale}`, experiences);
     personalExperiences.set("userId", userId);
 
     const savedData = await personalExperiences.save({ session });
@@ -90,9 +90,9 @@ export const update = async (req, res) => {
   try {
     const userId = req.userId;
     const personalExperiencesId = req.params.id;
-    const { sectionTitle, recentPositionsCount, experiences, locale } = req.body;
+    const { sectionTitle, recentPositionsCount, experiences, resumeLocale } = req.body;
 
-    if (!ALLOWED_LOCALES.includes(locale)) {
+    if (!ALLOWED_LOCALES.includes(resumeLocale)) {
       return getError(res, 400, { message: 'Invalid locale!' });
     }
 
@@ -109,18 +109,18 @@ export const update = async (req, res) => {
     const updateData = {};
 
     if (sectionTitle !== undefined) {
-      updateData[`sectionTitle.${locale}`] = sectionTitle;
+      updateData[`sectionTitle.${resumeLocale}`] = sectionTitle;
     }
 
     if (recentPositionsCount !== undefined) {
-      updateData[`recentPositionsCount.${locale}`] = recentPositionsCount;
+      updateData[`recentPositionsCount.${resumeLocale}`] = recentPositionsCount;
     }
 
     if (experiences !== undefined) {
       if (!Array.isArray(experiences)) {
         return getError(res, 400, { message: "Experiences must be an array!" });
       }
-      updateData[`experiences.${locale}`] = experiences;
+      updateData[`experiences.${resumeLocale}`] = experiences;
     }
 
     if (Object.keys(updateData).length === 0) {
