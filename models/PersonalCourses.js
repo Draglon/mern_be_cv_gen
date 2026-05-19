@@ -17,16 +17,20 @@ const courseSchema = new mongoose.Schema(
       trim: true,
       minlength: 2,
     },
+    isCurrent: {
+      type: Boolean,
+      default: false,
+    },
     startDate: {
       type: Date,
       required: true,
     },
     endDate: {
       type: Date,
-      required: true,
       validate: {
         validator: function (value) {
-          return !this.startDate || value >= this.startDate;
+          if (this.isCurrent) return true;
+          return value && (!this.startDate || value >= this.startDate);
         },
         message: "End date must be greater than start date",
       },

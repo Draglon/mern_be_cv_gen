@@ -36,6 +36,10 @@ export const personalCoursesValidation = [
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_TEXTAREA_CONTENT_NORMAL_LENGTH })
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_TEXTAREA_CONTENT_NORMAL_LENGTH} characters!`),
 
+  body('courses.*.isCurrent')
+    .optional({ values: 'falsy' })
+    .isBoolean(),
+
   body('courses.*.startDate')
     .notEmpty()
     .withMessage('Field is required!')

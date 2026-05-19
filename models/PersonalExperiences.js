@@ -38,13 +38,13 @@ const experienceSchema = new mongoose.Schema(
       trim: true,
       minlength: 2,
     },
-    startDate: {
-      type: Date,
-      required: true,
-    },
     isCurrent: {
       type: Boolean,
       default: false,
+    },
+    startDate: {
+      type: Date,
+      required: true,
     },
     endDate: {
       type: Date,

@@ -52,6 +52,10 @@ export const personalEducationValidation = [
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
 
+  body('education.*.isCurrent')
+    .optional({ values: 'falsy' })
+    .isBoolean(),
+
   body('education.*.startDate')
     .notEmpty()
     .withMessage('Field is required!')
