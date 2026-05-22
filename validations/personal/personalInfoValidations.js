@@ -7,6 +7,8 @@ import {
   MIN_NAME_LENGTH,
   MAX_NAME_LENGTH,
   MAX_TEXTAREA_CONTENT_NORMAL_LENGTH,
+  MIN_INPUT_POSTAL_ADDRESS_LENGTH,
+  MAX_INPUT_POSTAL_ADDRESS_LENGTH,
   REGEX_IMAGE_BASE64_FORMATS,
   REGEX_PHONE_NUMBER,
   REGEX_TELEGRAM,
@@ -65,12 +67,15 @@ export const personalInfoValidation = [
     .withMessage(`The length must not exceed ${MAX_EMAIL_LENGTH} characters!`),
 
   body('address')
+    .isString()
+    .withMessage('Address must be a string!')
+    .bail()
     .trim()
     .notEmpty()
     .withMessage('Field is required!')
     .bail()
-    .isLength({ max: MAX_INPUT_LENGTH })
-    .withMessage(`The length must not exceed ${MAX_INPUT_LENGTH} characters!`),
+    .isLength({ min: MIN_INPUT_POSTAL_ADDRESS_LENGTH, max: MAX_INPUT_POSTAL_ADDRESS_LENGTH })
+    .withMessage(`Must be ${MIN_INPUT_POSTAL_ADDRESS_LENGTH}-${MAX_INPUT_POSTAL_ADDRESS_LENGTH} characters!`),
 
   body('phoneNumber')
     .trim()
