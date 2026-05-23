@@ -37,7 +37,8 @@ export const personalCoursesValidation = [
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_TEXTAREA_CONTENT_NORMAL_LENGTH} characters!`),
 
   body('courses.*.isCurrent')
-    .optional({ values: 'falsy' })
+    .optional()
+    .toBoolean()
     .isBoolean(),
 
   body('courses.*.startDate')
@@ -48,18 +49,41 @@ export const personalCoursesValidation = [
     .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('courses.*.endDate')
+    .if((_, { req, path }) => {
+      const match = path.match(/courses\.(\d+)\.endDate/);
+
+      if (!match) {
+        return false;
+      }
+
+      const index = Number(match[1]);
+
+      return !req.body.courses[index].isCurrent;
+    })
     .notEmpty()
     .withMessage('Field is required!')
     .bail()
-    .isISO8601({ strict: true })
+    .isISO8601()
     .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('courses').custom((courses) => {
-    for (const item of courses) {
-      if (new Date(item.endDate) < new Date(item.startDate)) {
+    for (const exp of courses) {
+      if (exp.isCurrent) {
+        continue;
+      }
+
+      const start = new Date(exp.startDate);
+      const end = new Date(exp.endDate);
+
+      if (
+        !Number.isNaN(start.getTime()) &&
+        !Number.isNaN(end.getTime()) &&
+        end < start
+      ) {
         throw new Error('End date must be greater than start date');
       }
     }
+
     return true;
   }),
 ];

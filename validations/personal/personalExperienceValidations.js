@@ -73,12 +73,26 @@ export const personalExperienceValidation = [
     .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('experiences.*.endDate')
-    .optional({ values: 'falsy' })
+    .if((_, { req, path }) => {
+      const match = path.match(/experiences\.(\d+)\.endDate/);
+
+      if (!match) {
+        return false;
+      }
+
+      const index = Number(match[1]);
+
+      return !req.body.experiences[index].isCurrent;
+    })
+    .notEmpty()
+    .withMessage('Field is required!')
+    .bail()
     .isISO8601()
     .withMessage('The date must be in the format YYYY-MM-DD.'),
 
   body('experiences.*.isCurrent')
-    .optional({ values: 'falsy' })
+    .optional()
+    .toBoolean()
     .isBoolean(),
 
   body('experiences.*.skills')
@@ -95,10 +109,22 @@ export const personalExperienceValidation = [
 
   body('experiences').custom((experiences) => {
     for (const exp of experiences) {
-      if (exp.endDate && new Date(exp.endDate) < new Date(exp.startDate)) {
+      if (exp.isCurrent) {
+        continue;
+      }
+
+      const start = new Date(exp.startDate);
+      const end = new Date(exp.endDate);
+
+      if (
+        !Number.isNaN(start.getTime()) &&
+        !Number.isNaN(end.getTime()) &&
+        end < start
+      ) {
         throw new Error('End date must be greater than start date');
       }
     }
+
     return true;
   }),
 ];
