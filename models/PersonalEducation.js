@@ -19,15 +19,11 @@ const educationSchema = new mongoose.Schema(
     },
     specialization: {
       type: String,
-      required: true,
       trim: true,
-      minlength: 2,
     },
     faculty: {
       type: String,
-      required: true,
       trim: true,
-      minlength: 2,
     },
     isCurrent: {
       type: Boolean,

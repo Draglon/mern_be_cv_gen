@@ -37,18 +37,14 @@ export const personalEducationValidation = [
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
 
   body('education.*.faculty')
+    .optional({ values: 'falsy' })
     .trim()
-    .notEmpty()
-    .withMessage('Field is required!')
-    .bail()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
 
   body('education.*.specialization')
+    .optional({ values: 'falsy' })
     .trim()
-    .notEmpty()
-    .withMessage('Field is required!')
-    .bail()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
 

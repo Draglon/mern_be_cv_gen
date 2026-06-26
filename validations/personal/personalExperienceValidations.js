@@ -95,15 +95,8 @@ export const personalExperienceValidation = [
     .toBoolean()
     .isBoolean(),
 
-  body('experiences.*.skills')
-    .isArray({ min: 1 })
-    .withMessage('Add at least one skill!'),
-
   body('experiences.*.skills.*')
     .trim()
-    .notEmpty()
-    .withMessage('Field is required!')
-    .bail()
     .isLength({ min: MIN_INPUT_LENGTH, max: MAX_INPUT_LENGTH })
     .withMessage(`Must be ${MIN_INPUT_LENGTH}-${MAX_INPUT_LENGTH} characters!`),
 
