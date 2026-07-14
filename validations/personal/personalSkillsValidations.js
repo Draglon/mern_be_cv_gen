@@ -20,10 +20,6 @@ export const personalSkillsValidation = [
     .matches(REGEX_STRING)
     .withMessage('Please use only letters and spaces!'),
 
-  body('skills')
-    .isArray({ min: 1 })
-    .withMessage('Add at least one skill!'),
-
   body('skills.*')
     .isObject()
     .withMessage('Invalid skill item'),

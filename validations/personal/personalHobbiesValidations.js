@@ -12,10 +12,6 @@ export const personalHobbiesValidation = [
     .matches(REGEX_STRING)
     .withMessage('Please use only letters and spaces!'),
 
-  body('hobbies')
-    .isArray({ min: 1 })
-    .withMessage('Add at least one hobby!'),
-
   body('hobbies.*')
     .isObject()
     .withMessage('Invalid hobby item'),

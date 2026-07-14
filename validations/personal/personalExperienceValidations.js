@@ -19,10 +19,6 @@ export const personalExperienceValidation = [
     .isInt({ min: 1 })
     .withMessage('Must be a positive number'),
 
-  body('experiences')
-    .isArray({ min: 1 })
-    .withMessage('Add at least one experience!'),
-
   body('experiences.*')
     .isObject()
     .withMessage('Invalid experience item'),

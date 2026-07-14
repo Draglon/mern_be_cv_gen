@@ -13,13 +13,6 @@ export const personalLanguagesValidation = [
     .matches(REGEX_STRING)
     .withMessage('Please use only letters and spaces!'),
 
-  body('languages')
-    .notEmpty()
-    .withMessage('Languages are required')
-    .bail()
-    .isArray({ min: 1 })
-    .withMessage('Add at least one language!'),
-
   body('languages.*')
     .isObject()
     .withMessage('Invalid language item'),

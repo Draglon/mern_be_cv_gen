@@ -20,10 +20,6 @@ export const personalToolsValidation = [
     .matches(REGEX_STRING)
     .withMessage('Please use only letters and spaces!'),
 
-  body('tools')
-    .isArray({ min: 1 })
-    .withMessage('Add at least one skill!'),
-
   body('tools.*')
     .isObject()
     .withMessage('Invalid tool item'),

@@ -12,10 +12,6 @@ export const personalCoursesValidation = [
     .matches(REGEX_STRING)
     .withMessage('Please use only letters and spaces!'),
 
-  body('courses')
-    .isArray({ min: 1 })
-    .withMessage('Add at least one course!'),
-
   body('courses.*')
     .isObject()
     .withMessage('Invalid course item'),
