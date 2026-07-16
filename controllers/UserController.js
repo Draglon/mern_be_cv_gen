@@ -110,3 +110,27 @@ export const updateUser = async (req, res) => {
     getError(res, 500, { message: "Server error!", error });
   }
 };
+
+export const updateUserResume = async (req, res) => {
+  try {
+    const { resume } = req.body;
+    const { userId } = req;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return getError(res, 404, { message: "User not found!" });
+    }
+
+    const savedData = await UserModel.findByIdAndUpdate(
+      userId,
+      { $set: { resume } },
+      { new: true, runValidators: true }
+    );
+
+    return getResponse(res, 200, savedData);
+  } catch (error) {
+    console.log(error);
+    getError(res, 500, { message: "Server error!", error });
+  }
+};

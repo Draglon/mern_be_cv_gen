@@ -80,6 +80,8 @@ app.post('/auth/register', userValidations.registerValidation, handleValidationE
 app.get('/auth/user', checkAuth, UserController.fetchUser);
 // profile
 app.patch('/users/:userId', checkAuth, profileValidations.profileValidation, handleValidationErrors, UserController.updateUser);
+// Update user resume
+app.patch('/users/:userId/resume', checkAuth, UserController.updateUserResume);
 // settings - delete account
 app.delete('/users/:userId', checkAuth, settingsValidations.deleteAccountValidation, handleValidationErrors, SettingsController.deleteAccount);
 app.patch('/users/:userId/email', checkAuth, settingsValidations.changeEmailValidation, handleValidationErrors, SettingsController.updateUserEmail);

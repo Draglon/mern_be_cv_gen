@@ -30,6 +30,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resume: {
+    currentStep: {
+      type: Number,
+      default: 1,
+    },
+    isCreated: {
+      type: Boolean,
+      default: false,
+    }
+  },
   personalInfoId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "PersonalInfo",
