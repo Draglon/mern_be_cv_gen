@@ -113,7 +113,7 @@ export const updateUser = async (req, res) => {
 
 export const updateUserResume = async (req, res) => {
   try {
-    const { resume } = req.body;
+    const { currentStep, isCreated } = req.body;
     const { userId } = req;
 
     const user = await UserModel.findById(userId);
@@ -124,7 +124,12 @@ export const updateUserResume = async (req, res) => {
 
     const savedData = await UserModel.findByIdAndUpdate(
       userId,
-      { $set: { resume } },
+      {
+        $set: { 
+          "resume.isCreated": isCreated,
+          "resume.currentStep": currentStep,
+        }
+      },
       { new: true, runValidators: true }
     );
 

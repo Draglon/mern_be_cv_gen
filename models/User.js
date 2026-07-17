@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
   resume: {
     currentStep: {
       type: Number,
-      default: 1,
+      default: 0,
     },
     isCreated: {
       type: Boolean,
